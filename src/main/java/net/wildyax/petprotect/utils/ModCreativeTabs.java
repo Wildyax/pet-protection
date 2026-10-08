@@ -25,6 +25,7 @@ public class ModCreativeTabs {
                         output.accept(ModItems.IRON_MEDAL);
                         output.accept(ModItems.GOLD_MEDAL);
                         output.accept(ModItems.DIAMOND_MEDAL);
+                        output.accept(ModItems.SOUL_VESSEL);
 
                     }))
                     .build());

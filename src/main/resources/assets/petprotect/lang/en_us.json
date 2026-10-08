@@ -4,9 +4,19 @@
   "item.petprotect.iron_medal": "Iron Medal",
   "item.petprotect.gold_medal": "Gold Medal",
   "item.petprotect.diamond_medal": "Diamond Medal",
+  "item.petprotect.soul_iron_medal": "Soul Iron Medal",
+  "item.petprotect.soul_gold_medal": "Soul Gold Medal",
+  "item.petprotect.soul_diamond_medal": "Soul Diamond Medal",
+  "item.petprotect.soul_vessel": "Soul Vessel",
+  "item.petprotect.resurrection_pearl": "Resurrection Pearl",
 
   "message.petprotect.has_medal": "%s already own a medal",
   "message.petprotect.has_no_medal": "%s not own medal",
+
+  "tooltip.petprotect.no_pet_assigned": "No pet assigned",
+  "tooltip.petprotect.soul_medal.pet_name": "§7Medal of§r %s",
+  "tooltip.petprotect.soul_medal.pet_owner": "§7Owner§r %s",
+  "tooltip.petprotect.resurrection_pearl.pet_name": "§7Soul of§r §9%s§r",
 
   "petprotect.configuration.title": "Pet Protect Configuration",
   "petprotect.configuration.section.petprotect.common.toml": "Common Settings",
@@ -16,6 +26,8 @@
   "petprotect.configuration.protect_from_owner.tooltip": "The medal protect pet from his owner's damages",
   "petprotect.configuration.protect_from_team": "Protect from team",
   "petprotect.configuration.protect_from_team.tooltip": "The medal protect pet from owner's team players if PVP is turned off",
+  "petprotect.configuration.allow_resurrection": "Allow resurrection",
+  "petprotect.configuration.allow_resurrection.tooltip": "Allow to create a resurrection pearl in anvil with the medal",
   "petprotect.configuration.render_on_pet": "Render on pet",
   "petprotect.configuration.render_on_pet.tooltip": "Display the medal on the pet",
 
@@ -31,5 +43,4 @@
   "petprotect.configuration.diamond_medal": "Diamond Medal",
   "petprotect.configuration.diamond_medal.button": "Edit",
   "petprotect.configuration.diamond_medal.tooltip": "Diamond medal configuration"
-
 }

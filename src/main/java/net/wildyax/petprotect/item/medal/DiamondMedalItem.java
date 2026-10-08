@@ -1,7 +1,9 @@
 package net.wildyax.petprotect.item.medal;
 
 
+import net.minecraft.world.item.Item;
 import net.wildyax.petprotect.config.Config;
+import net.wildyax.petprotect.item.ModItems;
 
 public class DiamondMedalItem extends MedalItem{
 
@@ -22,5 +24,10 @@ public class DiamondMedalItem extends MedalItem{
     @Override
     public boolean renderOnPet() {
         return Config.COMMON.diamondMedalRenderOnPet.get();
+    }
+
+    @Override
+    public Item getSoulMedalItem() {
+        return ModItems.SOUL_DIAMOND_MEDAL.get();
     }
 }

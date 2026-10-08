@@ -3,6 +3,7 @@ package net.wildyax.petprotect.event;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.resources.PlayerSkin;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
@@ -14,6 +15,7 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.MainThreadPayloadHandler;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import net.wildyax.petprotect.PetProtect;
+import net.wildyax.petprotect.entities.ModEntities;
 import net.wildyax.petprotect.network.ClientPayloadHandler;
 import net.wildyax.petprotect.network.MedalItemData;
 import net.wildyax.petprotect.render.cat.ModCatRenderer;
@@ -33,7 +35,7 @@ public class ClientEvent {
         event.registerEntityRenderer(EntityType.WOLF, ModWolfRenderer::new);
         event.registerEntityRenderer(EntityType.CAT, ModCatRenderer::new);
         event.registerEntityRenderer(EntityType.PARROT, ModParrotRenderer::new);
-
+        event.registerEntityRenderer(ModEntities.RESURRECTION_PEARL.get(), ThrownItemRenderer::new);
     }
 
     /**

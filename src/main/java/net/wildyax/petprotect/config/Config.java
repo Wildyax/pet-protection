@@ -9,14 +9,17 @@ public class Config {
 
         public final ModConfigSpec.BooleanValue ironMedalProtectFromOwner;
         public final ModConfigSpec.BooleanValue ironMedalProtectFromTeam;
+        public final ModConfigSpec.BooleanValue ironMedalAllowResurrection;
         public final ModConfigSpec.BooleanValue ironMedalRenderOnPet;
 
         public final ModConfigSpec.BooleanValue goldMedalProtectFromOwner;
         public final ModConfigSpec.BooleanValue goldMedalProtectFromTeam;
+        public final ModConfigSpec.BooleanValue goldMedalAllowResurrection;
         public final ModConfigSpec.BooleanValue goldMedalRenderOnPet;
 
         public final ModConfigSpec.BooleanValue diamondMedalProtectFromOwner;
         public final ModConfigSpec.BooleanValue diamondMedalProtectFromTeam;
+        public final ModConfigSpec.BooleanValue diamondMedalAllowResurrection;
         public final ModConfigSpec.BooleanValue diamondMedalRenderOnPet;
 
         Common(ModConfigSpec.Builder builder) {
@@ -30,6 +33,9 @@ public class Config {
             ironMedalProtectFromTeam = builder
                     .comment("The medal protect pet from players of his owner's team if PVP is turned off")
                     .define("protect_from_team", false);
+            ironMedalAllowResurrection = builder
+                    .comment("Allow the medal to create a resurrection pearl in anvil")
+                    .define("allow_resurrection", false);
             ironMedalRenderOnPet = builder
                     .comment("Display the medal on the pet")
                     .define("render_on_pet", true);
@@ -42,6 +48,9 @@ public class Config {
             goldMedalProtectFromTeam = builder
                     .comment("The medal protect pet from players of his owner's team if PVP is turned off")
                     .define("protect_from_team", true);
+            goldMedalAllowResurrection = builder
+                    .comment("Allow the medal to create a resurrection pearl in anvil")
+                    .define("allow_resurrection", false);
             goldMedalRenderOnPet = builder
                     .comment("Display the medal on the pet")
                     .define("render_on_pet", true);
@@ -54,6 +63,9 @@ public class Config {
             diamondMedalProtectFromTeam = builder
                     .comment("The medal protect pet from players of his owner's team if PVP is turned off")
                     .define("protect_from_team", true);
+            diamondMedalAllowResurrection = builder
+                    .comment("Allow the medal to create a resurrection pearl in anvil")
+                    .define("allow_resurrection", true);
             diamondMedalRenderOnPet = builder
                     .comment("Display the medal on the pet")
                     .define("render_on_pet", true);

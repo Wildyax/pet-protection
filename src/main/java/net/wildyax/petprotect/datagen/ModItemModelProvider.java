@@ -1,6 +1,7 @@
 package net.wildyax.petprotect.datagen;
 
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.wildyax.petprotect.PetProtect;
@@ -17,5 +18,10 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.IRON_MEDAL.get());
         basicItem(ModItems.GOLD_MEDAL.get());
         basicItem(ModItems.DIAMOND_MEDAL.get());
+        basicItem(ModItems.SOUL_IRON_MEDAL.get());
+        basicItem(ModItems.SOUL_GOLD_MEDAL.get());
+        basicItem(ModItems.SOUL_DIAMOND_MEDAL.get());
+        basicItem(ModItems.SOUL_VESSEL.get());
+        basicItem(ModItems.RESURRECTION_PEARL.get());
     }
 }

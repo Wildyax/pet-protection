@@ -8,6 +8,9 @@ import net.wildyax.petprotect.PetProtect;
 import net.wildyax.petprotect.item.medal.DiamondMedalItem;
 import net.wildyax.petprotect.item.medal.GoldMedalItem;
 import net.wildyax.petprotect.item.medal.IronMedalItem;
+import net.wildyax.petprotect.item.medal.soul.SoulDiamondMedalItem;
+import net.wildyax.petprotect.item.medal.soul.SoulGoldMedalItem;
+import net.wildyax.petprotect.item.medal.soul.SoulIronMedalItem;
 
 public class ModItems {
 
@@ -15,18 +18,44 @@ public class ModItems {
 
     public static final DeferredItem<Item> IRON_MEDAL = ITEMS.register("iron_medal",
             () -> new IronMedalItem(new Item.Properties()
+                    .stacksTo(64)
+            )
+    );
+    public static final DeferredItem<Item> SOUL_IRON_MEDAL = ITEMS.register("soul_iron_medal",
+            () -> new SoulIronMedalItem(new Item.Properties()
                     .stacksTo(1)
             )
     );
 
     public static final DeferredItem<Item> GOLD_MEDAL = ITEMS.register("gold_medal",
             () -> new GoldMedalItem(new Item.Properties()
+                    .stacksTo(64)
+            )
+    );
+    public static final DeferredItem<Item> SOUL_GOLD_MEDAL = ITEMS.register("soul_gold_medal",
+            () -> new SoulGoldMedalItem(new Item.Properties()
                     .stacksTo(1)
             )
     );
 
     public static final DeferredItem<Item> DIAMOND_MEDAL = ITEMS.register("diamond_medal",
             () -> new DiamondMedalItem(new Item.Properties()
+                    .stacksTo(64)
+            )
+    );
+    public static final DeferredItem<Item> SOUL_DIAMOND_MEDAL = ITEMS.register("soul_diamond_medal",
+            () -> new SoulDiamondMedalItem(new Item.Properties()
+                    .stacksTo(1)
+            )
+    );
+
+    public static final DeferredItem<Item> SOUL_VESSEL = ITEMS.register("soul_vessel",
+            () -> new Item(new Item.Properties()
+                    .stacksTo(64)
+            )
+    );
+    public static final DeferredItem<Item> RESURRECTION_PEARL = ITEMS.register("resurrection_pearl",
+            () -> new ResurrectionPearlItem(new Item.Properties()
                     .stacksTo(1)
             )
     );

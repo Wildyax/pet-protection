@@ -43,5 +43,15 @@ public class ModRecipeProvider extends RecipeProvider {
                 .pattern("#")
                 .unlockedBy("has_diamond", has(Items.DIAMOND))
                 .save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.SOUL_VESSEL)
+                .define('X', Items.SOUL_SAND)
+                .define('#', Items.GHAST_TEAR)
+                .pattern(" X ")
+                .pattern("X#X")
+                .pattern(" X ")
+                .unlockedBy("has_ghast_tear", has(Items.GHAST_TEAR))
+                .unlockedBy("has_soul_sand", has(Items.SOUL_SAND))
+                .save(recipeOutput);
     }
 }

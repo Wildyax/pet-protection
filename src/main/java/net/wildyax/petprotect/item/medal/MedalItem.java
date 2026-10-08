@@ -8,6 +8,8 @@ public abstract class MedalItem extends Item {
         super(properties);
     }
 
+    public abstract Item getSoulMedalItem();
+
     public abstract boolean protectFromOwner();
 
     public abstract boolean protectFromTeamPlayer();

@@ -8,6 +8,6 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 @Mixin(WolfModel.class)
 public interface WolfModelAccessor {
 
-    @Accessor("body")
-    ModelPart getBody();
+    @Accessor("upperBody")
+    ModelPart getUpperBody();
 }

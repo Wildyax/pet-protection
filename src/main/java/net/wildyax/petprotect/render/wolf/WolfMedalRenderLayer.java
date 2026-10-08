@@ -41,20 +41,13 @@ public class WolfMedalRenderLayer extends RenderLayer<Wolf, WolfModel<Wolf>> {
                 poseStack.pushPose();
 
                 WolfModelAccessor wolfModel = (WolfModelAccessor) this.getParentModel();
-                ModelPart body = wolfModel.getBody();
+                ModelPart body = wolfModel.getUpperBody();
                 body.translateAndRotate(poseStack);
 
-                if (wolf.isInSittingPose()) {
-                    poseStack.translate(0F, -0.28F, -0.34f);
-                    poseStack.mulPose(Axis.XP.rotationDegrees(117f));
-
-                } else {
-                    poseStack.translate(0F, -0.507F, -0.235F);
-                    poseStack.mulPose(Axis.XP.rotationDegrees(90F));
-                }
-
-                poseStack.mulPose(Axis.YP.rotationDegrees(180F));
+                poseStack.translate(0.06F, -0.195F, -0.235F);
                 poseStack.scale(0.22F, 0.22F, 0.22F);
+                poseStack.mulPose(Axis.XP.rotationDegrees(90F));
+                poseStack.mulPose(Axis.YP.rotationDegrees(180F));
 
                 this.itemRenderer.renderStatic(medalItemStack, ItemDisplayContext.FIXED, packedLight, OverlayTexture.NO_OVERLAY, poseStack, multiBufferSource, wolf.level(), 0);
 
