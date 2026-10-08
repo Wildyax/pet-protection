@@ -1,0 +1,62 @@
+[08oct.2026 18:22:53.286] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgeserveruserdev, --gameDir, ., --fml.neoForgeVersion, 21.1.114, --fml.fmlVersion, 4.0.35, --fml.mcVersion, 1.21.1, --fml.neoFormVersion, 20240808.144430, --nogui]
+[08oct.2026 18:22:53.288] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: JVM identified as Eclipse Adoptium OpenJDK 64-Bit Server VM 21.0.12.1+1-LTS
+[08oct.2026 18:22:53.290] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher 11.0.4+main.d2e20e43 starting: java version 21.0.12.1 by Eclipse Adoptium; OS Linux arch amd64 version 7.2.8-200.fc44.x86_64
+[08oct.2026 18:22:53.391] [main/INFO] [net.neoforged.fml.loading.ImmediateWindowHandler/]: ImmediateWindowProvider not loading because launch target is forgeserveruserdev
+[08oct.2026 18:22:53.442] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.7 Source=union:/home/alex/.gradle/caches/modules-2/files-2.1/net.fabricmc/sponge-mixin/0.15.2+mixin.0.8.7/2af2f021d8e02a0220dc27a7a72b4666d66d44ca/sponge-mixin-0.15.2+mixin.0.8.7.jar%2387!/ Service=ModLauncher Env=SERVER
+[08oct.2026 18:22:53.679] [main/INFO] [net.neoforged.fml.loading.moddiscovery.locators.JarInJarDependencyLocator/]: Found 2 dependencies adding them to mods collection
+[08oct.2026 18:22:53.680] [main/INFO] [net.neoforged.fml.loading.moddiscovery.ModDiscoverer/]: 
+     Mod List:
+		Name Version (Mod Id)
+
+		Minecraft 1.21.1 (minecraft)
+		NeoForge 21.1.114 (neoforge)
+		Pet Protect 1.0.0 (petprotect)
+[08oct.2026 18:22:54.219] [main/INFO] [mixin/]: Compatibility level set to JAVA_21
+[08oct.2026 18:22:54.230] [main/INFO] [cpw.mods.modlauncher.LaunchServiceHandler/MODLAUNCHER]: Launching target 'forgeserveruserdev' with arguments [--gameDir, ., --nogui]
+[08oct.2026 18:22:55.043] [main/INFO] [MixinExtras|Service/]: Initializing MixinExtras via com.llamalad7.mixinextras.service.MixinExtrasServiceImpl(version=0.4.1).
+[08oct.2026 18:22:59.413] [main/WARN] [net.minecraft.commands.Commands/]: Ambiguity between arguments [teleport, location] and [teleport, destination] with inputs: [0.1 -0.5 .9, 0 0 0]
+[08oct.2026 18:22:59.414] [main/WARN] [net.minecraft.commands.Commands/]: Ambiguity between arguments [teleport, location] and [teleport, targets] with inputs: [0.1 -0.5 .9, 0 0 0]
+[08oct.2026 18:22:59.417] [main/WARN] [net.minecraft.commands.Commands/]: Ambiguity between arguments [teleport, destination] and [teleport, targets] with inputs: [Player, 0123, @e, dd12be42-52a9-4a91-a8a1-11c01849e498]
+[08oct.2026 18:22:59.418] [main/WARN] [net.minecraft.commands.Commands/]: Ambiguity between arguments [teleport, targets] and [teleport, destination] with inputs: [Player, 0123, dd12be42-52a9-4a91-a8a1-11c01849e498]
+[08oct.2026 18:22:59.419] [main/WARN] [net.minecraft.commands.Commands/]: Ambiguity between arguments [teleport, targets, location] and [teleport, targets, destination] with inputs: [0.1 -0.5 .9, 0 0 0]
+[08oct.2026 18:22:59.481] [modloading-worker-0/INFO] [net.neoforged.neoforge.common.NeoForgeMod/NEOFORGE-MOD]: NeoForge mod loading, version 21.1.114, for MC 1.21.1
+[08oct.2026 18:22:59.740] [main/INFO] [com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService/]: Environment: Environment[sessionHost=https://sessionserver.mojang.com, servicesHost=https://api.minecraftservices.com, name=PROD]
+[08oct.2026 18:22:59.822] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/home/alex/Projets/pet-protect/build/moddev/artifacts/neoforge-21.1.114.jar%23119!/assets/.mcassetsroot' uses unexpected schema
+[08oct.2026 18:22:59.822] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/home/alex/Projets/pet-protect/build/moddev/artifacts/neoforge-21.1.114.jar%23119!/data/.mcassetsroot' uses unexpected schema
+[08oct.2026 18:23:00.554] [main/INFO] [net.minecraft.world.item.crafting.RecipeManager/]: Loaded 1294 recipes
+[08oct.2026 18:23:00.703] [main/INFO] [net.minecraft.advancements.AdvancementTree/]: Loaded 1403 advancements
+[08oct.2026 18:23:01.193] [Server thread/INFO] [net.minecraft.server.dedicated.DedicatedServer/]: Starting minecraft server version 1.21.1
+[08oct.2026 18:23:01.193] [Server thread/INFO] [net.minecraft.server.dedicated.DedicatedServer/]: Loading properties
+[08oct.2026 18:23:01.193] [Server thread/INFO] [net.minecraft.server.dedicated.DedicatedServer/]: Default game type: SURVIVAL
+[08oct.2026 18:23:01.193] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Generating keypair
+[08oct.2026 18:23:01.242] [Server thread/INFO] [net.minecraft.server.dedicated.DedicatedServer/]: Starting Minecraft server on *:25565
+[08oct.2026 18:23:01.279] [Server thread/INFO] [net.minecraft.server.network.ServerConnectionListener/]: Using epoll channel type
+[08oct.2026 18:23:01.307] [Server thread/WARN] [net.minecraft.server.dedicated.DedicatedServer/]: **** SERVER IS RUNNING IN OFFLINE/INSECURE MODE!
+[08oct.2026 18:23:01.307] [Server thread/WARN] [net.minecraft.server.dedicated.DedicatedServer/]: The server will make no attempt to authenticate usernames. Beware.
+[08oct.2026 18:23:01.307] [Server thread/WARN] [net.minecraft.server.dedicated.DedicatedServer/]: While this makes the game possible to play without internet access, it also opens up the ability for hackers to connect with any username they choose.
+[08oct.2026 18:23:01.307] [Server thread/WARN] [net.minecraft.server.dedicated.DedicatedServer/]: To change this, set "online-mode" to "true" in the server.properties file.
+[08oct.2026 18:23:01.337] [Server thread/INFO] [net.minecraft.server.dedicated.DedicatedServer/]: Preparing level "world"
+[08oct.2026 18:23:02.041] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Preparing start region for dimension minecraft:overworld
+[08oct.2026 18:23:02.213] [worldgen/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Preparing spawn area: 0%
+[08oct.2026 18:23:02.461] [Server thread/INFO] [net.minecraft.server.level.progress.LoggerChunkProgressListener/]: Time elapsed: 420 ms
+[08oct.2026 18:23:02.461] [Server thread/INFO] [net.minecraft.server.dedicated.DedicatedServer/]: Done (1.146s)! For help, type "help"
+[08oct.2026 18:23:02.484] [Server thread/INFO] [net.neoforged.neoforge.gametest.GameTestHooks/]: Enabled Gametest Namespaces: [petprotect]
+[08oct.2026 18:23:02.488] [Server thread/INFO] [net.neoforged.neoforge.server.permission.PermissionAPI/]: Successfully initialized permission handler neoforge:default_handler
+[08oct.2026 18:23:10.814] [Server thread/INFO] [net.minecraft.server.players.PlayerList/]: Dev[/127.0.0.1:42216] logged in with entity id 129 at (-87.23133572673525, 84.0, -179.50305215003692)
+[08oct.2026 18:23:10.857] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Dev joined the game
+[08oct.2026 18:23:24.818] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: [Dev: Set own game mode to Creative Mode]
+[08oct.2026 18:24:40.151] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Dev has made the advancement [Best Friends Forever]
+[08oct.2026 18:25:59.650] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: [Dev: Set own game mode to Survival Mode]
+[08oct.2026 18:27:12.476] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: [Dev: Set own game mode to Creative Mode]
+[08oct.2026 18:31:07.299] [Server thread/INFO] [net.minecraft.server.network.ServerGamePacketListenerImpl/]: Dev lost connection: Disconnected
+[08oct.2026 18:31:07.299] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Dev left the game
+[08oct.2026 18:31:13.089] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Stopping server
+[08oct.2026 18:31:13.090] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving players
+[08oct.2026 18:31:13.090] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving worlds
+[08oct.2026 18:31:13.817] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[world]'/minecraft:overworld
+[08oct.2026 18:31:13.966] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[world]'/minecraft:the_end
+[08oct.2026 18:31:13.971] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Saving chunks for level 'ServerLevel[world]'/minecraft:the_nether
+[08oct.2026 18:31:13.981] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: ThreadedAnvilChunkStorage (world): All chunks are saved
+[08oct.2026 18:31:13.982] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: ThreadedAnvilChunkStorage (DIM1): All chunks are saved
+[08oct.2026 18:31:13.982] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: ThreadedAnvilChunkStorage (DIM-1): All chunks are saved
+[08oct.2026 18:31:13.982] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: ThreadedAnvilChunkStorage: All dimensions are saved

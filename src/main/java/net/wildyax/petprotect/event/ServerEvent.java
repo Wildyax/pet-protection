@@ -2,6 +2,7 @@ package net.wildyax.petprotect.event;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.TamableAnimal;
@@ -29,6 +30,9 @@ import net.wildyax.petprotect.network.MedalItemData;
 import net.wildyax.petprotect.utils.ModAttachments;
 
 import java.util.Objects;
+import java.util.UUID;
+
+import com.mojang.authlib.GameProfile;
 
 @EventBusSubscriber(bus = EventBusSubscriber.Bus.GAME, modid = PetProtect.MOD_ID)
 public class ServerEvent {
@@ -120,6 +124,10 @@ public class ServerEvent {
      */
     @SubscribeEvent
     public static void onEntityDeath(LivingDeathEvent event) {
+        // Ignore if we are on client side
+        if (event.getEntity().level().isClientSide()) {
+            return;
+        }
         if (event.getEntity() instanceof TamableAnimal pet && pet.isTame()) {
             if (pet.getData(ModAttachments.MEDAL_ITEM).getStackInSlot(0) != ItemStack.EMPTY) {
                 ItemStack medalStack = pet.getData(ModAttachments.MEDAL_ITEM).getStackInSlot(0);
@@ -134,7 +142,7 @@ public class ServerEvent {
                         soulMedalStack.set(ModDataComponent.SOUL_MEDAL_DATA, new SoulMedalDataComponent(
                                 pet.hasCustomName() ? Objects.requireNonNull(pet.getCustomName()).getString() : "",
                                 pet.getType().toShortString(),
-                                Objects.requireNonNull(pet.getOwner()).getName().getString(),
+                                getOwnerName(pet),
                                 entityData
                         ));
 
@@ -180,5 +188,22 @@ public class ServerEvent {
                 event.setCost(2);
             }
         }
+    }
+
+    /**
+     * Get the owner name, even if he is offline
+     * @param pet Pet
+     * @return Owner name, or "?" if unknown
+    */
+    private static String getOwnerName(TamableAnimal pet) {
+        if (pet.getOwner() != null) {
+            return pet.getOwner().getName().getString();
+        }
+        UUID ownerUUID = pet.getOwnerUUID();
+        MinecraftServer server = pet.getServer();
+        if (ownerUUID != null && server != null && server.getProfileCache() != null) {
+            return server.getProfileCache().get(ownerUUID).map(GameProfile::getName).orElse("?");
+        }
+        return "?";
     }
 }

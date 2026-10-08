@@ -11,13 +11,8 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
-import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
-import net.neoforged.neoforge.network.handling.MainThreadPayloadHandler;
-import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import net.wildyax.petprotect.PetProtect;
 import net.wildyax.petprotect.entities.ModEntities;
-import net.wildyax.petprotect.network.ClientPayloadHandler;
-import net.wildyax.petprotect.network.MedalItemData;
 import net.wildyax.petprotect.render.cat.ModCatRenderer;
 import net.wildyax.petprotect.render.parrot.ModParrotRenderer;
 import net.wildyax.petprotect.render.player.ParrotOnPlayerShoulderLayer;
@@ -51,22 +46,5 @@ public class ClientEvent {
                 renderer.addLayer(new ParrotOnPlayerShoulderLayer(renderer, Minecraft.getInstance().getItemRenderer()));
             }
         }
-    }
-
-    /**
-     * Register network PayLoad Handler to communicate
-     * between server and client
-     * @param event Event
-     */
-    @SubscribeEvent
-    public static void register(final RegisterPayloadHandlersEvent event) {
-        final PayloadRegistrar registrar = event.registrar("1");
-        registrar.playToClient(
-                MedalItemData.TYPE,
-                MedalItemData.STREAM_CODEC,
-                new MainThreadPayloadHandler<>(
-                        ClientPayloadHandler::setEntityMedalItemData
-                )
-        );
     }
 }
