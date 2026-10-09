@@ -1,4 +1,4 @@
-package net.wildyax.petprotect.render.player;
+package net.wildyax.petprotect.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
@@ -7,11 +7,9 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.wildyax.petprotect.item.medal.MedalItem;
@@ -73,10 +71,14 @@ public class ParrotOnPlayerShoulderLayer extends RenderLayer<Player, PlayerModel
                                 .ifPresent(entityType -> {
                                     poseStack.pushPose();
 
-                                    poseStack.translate(leftShoulder ? 0.4F : -0.4f, player.isCrouching() ? -0.145f : -0.355F, -0.27F);
-                                    poseStack.mulPose(Axis.ZP.rotationDegrees(180f));
-                                    poseStack.scale(0.14F, 0.14F, 0.14F);
-                                    this.itemRenderer.renderStatic(medalItemStack, ItemDisplayContext.FIXED, packedLight, OverlayTexture.NO_OVERLAY, poseStack, buffer, player.level(), 0);
+                                    // Same position as the vanilla ParrotOnShoulderLayer
+                                    poseStack.translate(leftShoulder ? 0.4F : -0.4f, player.isCrouching() ? -1.3F : -1.5F, 0.0F);
+
+                                    // Parrot body pose when on shoulder (values from ParrotModel)
+                                    poseStack.translate(0F, 16.5F / 16F, -3F / 16F);
+                                    poseStack.mulPose(Axis.XP.rotation(0.4937F));
+
+                                    ParrotMedalRenderLayer.renderMedalOnBody(poseStack, buffer, packedLight, medalItemStack, itemRenderer, player.level());
 
                                     poseStack.popPose();
                                 });

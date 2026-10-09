@@ -1,8 +1,9 @@
-package net.wildyax.petprotect.render.cat;
+package net.wildyax.petprotect.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.model.CatModel;
+import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
@@ -12,6 +13,7 @@ import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.wildyax.petprotect.item.medal.MedalItem;
+import net.wildyax.petprotect.mixin.OcelotModelAccessor;
 import net.wildyax.petprotect.utils.ModAttachments;
 
 public class CatMedalRenderLayer extends RenderLayer<Cat, CatModel<Cat>> {
@@ -32,30 +34,31 @@ public class CatMedalRenderLayer extends RenderLayer<Cat, CatModel<Cat>> {
             Cat cat,
             float v, float v1, float v2, float v3, float v4, float v5
     ) {
-        if (cat.isTame() && !cat.getData(ModAttachments.MEDAL_ITEM).getStackInSlot(0).isEmpty()) {
-            ItemStack medalItemStack = cat.getData(ModAttachments.MEDAL_ITEM).getStackInSlot(0);
+        ItemStack medalItemStack = cat.getData(ModAttachments.MEDAL_ITEM).getStackInSlot(0);
 
-            if (medalItemStack.getItem() instanceof MedalItem medalItem && medalItem.renderOnPet()) {
+        if (cat.isTame() && medalItemStack.getItem() instanceof MedalItem medalItem && medalItem.renderOnPet()) {
+            poseStack.pushPose();
 
-                poseStack.pushPose();
-
-                if (cat.isInSittingPose()) {
-                    poseStack.translate(0F, 0.94F, -0.5F);
-                    poseStack.mulPose(Axis.XP.rotationDegrees(-45F));
-                    poseStack.mulPose(Axis.YP.rotationDegrees(0F));
-                    poseStack.mulPose(Axis.ZP.rotationDegrees(180f));
-                } else {
-                    poseStack.translate(0F, 1.175F, -0.45F);
-                    poseStack.mulPose(Axis.ZP.rotationDegrees(180f));
-                }
-
-                poseStack.scale(0.22F, 0.22F, 0.22F);
-
-
-                this.itemRenderer.renderStatic(medalItemStack, ItemDisplayContext.FIXED, packedLight, OverlayTexture.NO_OVERLAY, poseStack, multiBufferSource, cat.level(), 0);
-
-                poseStack.popPose();
+            if (this.getParentModel().young) {
+                poseStack.scale(0.5F, 0.5F, 0.5F);
+                poseStack.translate(0.0F, 1.5F, 0.0F);
             }
+
+            // Follow the cat body (standing, sitting, crouching...)
+            ModelPart body = ((OcelotModelAccessor) this.getParentModel()).getBody();
+            body.translateAndRotate(poseStack);
+
+            poseStack.translate(0F, 0.175F, -0.425F);
+            poseStack.mulPose(Axis.XP.rotationDegrees(-90F));
+            poseStack.mulPose(Axis.ZP.rotationDegrees(180F));
+
+            poseStack.scale(0.22F, 0.22F, 0.22F);
+
+
+            this.itemRenderer.renderStatic(medalItemStack, ItemDisplayContext.FIXED, packedLight, OverlayTexture.NO_OVERLAY, poseStack, multiBufferSource, cat.level(), 0);
+
+            poseStack.popPose();
+
         }
     }
 }

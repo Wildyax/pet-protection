@@ -1,4 +1,4 @@
-package net.wildyax.petprotect.render.wolf;
+package net.wildyax.petprotect.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
@@ -40,6 +40,12 @@ public class WolfMedalRenderLayer extends RenderLayer<Wolf, WolfModel<Wolf>> {
 
                 poseStack.pushPose();
 
+                if (this.getParentModel().young) {
+                    poseStack.scale(0.5F, 0.5F, 0.5F);
+                    poseStack.translate(0.0F, 1.5F, 0.0F);
+                }
+
+                // Follow the wolf body (standing, sitting, ...)
                 WolfModelAccessor wolfModel = (WolfModelAccessor) this.getParentModel();
                 ModelPart body = wolfModel.getUpperBody();
                 body.translateAndRotate(poseStack);
