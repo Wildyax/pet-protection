@@ -32,7 +32,7 @@ public class CatMedalRenderLayer extends RenderLayer<Cat, CatModel<Cat>> {
             Cat cat,
             float v, float v1, float v2, float v3, float v4, float v5
     ) {
-        if (cat.isTame() && cat.getData(ModAttachments.MEDAL_ITEM).getStackInSlot(0) != ItemStack.EMPTY) {
+        if (cat.isTame() && !cat.getData(ModAttachments.MEDAL_ITEM).getStackInSlot(0).isEmpty()) {
             ItemStack medalItemStack = cat.getData(ModAttachments.MEDAL_ITEM).getStackInSlot(0);
 
             if (medalItemStack.getItem() instanceof MedalItem medalItem && medalItem.renderOnPet()) {

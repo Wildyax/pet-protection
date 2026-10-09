@@ -3,22 +3,27 @@ package net.wildyax.petprotect.event;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.AnvilUpdateEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
+import net.neoforged.neoforge.event.entity.player.AnvilRepairEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.wildyax.petprotect.PetProtect;
 import net.wildyax.petprotect.component.ModDataComponent;
@@ -44,45 +49,42 @@ public class ServerEvent {
      */
     @SubscribeEvent
     public static void onPlayerInteractEntity(PlayerInteractEvent.EntityInteract event) {
+        Player player = event.getEntity();
+        ItemStack handItem = event.getItemStack();
 
-        var player = event.getEntity();
-        var entity = event.getTarget();
-        var handItem = player.getMainHandItem();
+        // Make sure that only the owner can put or remove a medal
+        if (event.getLevel().isClientSide()
+            || !(event.getTarget() instanceof TamableAnimal pet)
+            || !pet.isTame()
+            || !Objects.equals(pet.getOwnerUUID(), player.getUUID())) {
+            return;
+        }
 
-        if (handItem.getItem() instanceof MedalItem medalItem && !event.getLevel().isClientSide()) {
-            if (entity instanceof TamableAnimal pet && pet.isTame() && Objects.equals(pet.getOwnerUUID(), player.getUUID())) {
-                pet.setOrderedToSit(!pet.isOrderedToSit());
-                if (pet.getData(ModAttachments.MEDAL_ITEM).getStackInSlot(0) == ItemStack.EMPTY) {
-                    ItemStack medalStack = new ItemStack(medalItem, 1);
-                    pet.getData(ModAttachments.MEDAL_ITEM).insertItem(0, medalStack, false);
-                    CompoundTag tag = pet.getData(ModAttachments.MEDAL_ITEM).serializeNBT(event.getLevel().registryAccess());
-                    PacketDistributor.sendToAllPlayers(new MedalItemData(pet.getId(), tag));
-                    handItem.consume(1, player);
-                    event.getLevel().playSound(null, pet.getX(), pet.getY(), pet.getZ(), SoundEvents.ARMOR_EQUIP_WOLF.value(), SoundSource.NEUTRAL);
-                } else {
-                    player.displayClientMessage(Component.translatable("message.petprotect.has_medal", pet.getName().getString()), true);
-                }
+        ItemStackHandler medalSlot = pet.getData(ModAttachments.MEDAL_ITEM);
+
+        if (handItem.getItem() instanceof MedalItem) {
+            if (medalSlot.getStackInSlot(0).isEmpty()) {
+                medalSlot.insertItem(0, handItem.copyWithCount(1), false);
+                handItem.consume(1, player);
+                PacketDistributor.sendToPlayersTrackingEntity(pet, createMedalPayload(pet));
+                event.getLevel().playSound(null, pet.getX(), pet.getY(), pet.getZ(), SoundEvents.ARMOR_EQUIP_WOLF.value(), SoundSource.NEUTRAL);
+            } else {
+                player.displayClientMessage(Component.translatable("message.petprotect.has_medal", pet.getName().getString()), true);
             }
-        } else if (handItem.getItem() == Items.SHEARS && !event.getLevel().isClientSide()) {
-            if (entity instanceof TamableAnimal pet && pet.isTame() && Objects.equals(pet.getOwnerUUID(), player.getUUID())) {
-                if (pet.getData(ModAttachments.MEDAL_ITEM).getStackInSlot(0) == ItemStack.EMPTY) {
-                    pet.setOrderedToSit(!pet.isOrderedToSit());
-                    player.displayClientMessage(Component.translatable("message.petprotect.has_no_medal", pet.getName().getString()), true);
-                } else {
-                    if (pet instanceof Wolf wolf && wolf.isWearingBodyArmor()) {
-                        if (!player.isCrouching()) {
-                            return;
-                        }
-                    }
-                    ItemStack itemStack = pet.getData(ModAttachments.MEDAL_ITEM).extractItem(0,1,false);
-                    pet.spawnAtLocation(itemStack,1);
-
-                    CompoundTag tag = pet.getData(ModAttachments.MEDAL_ITEM).serializeNBT(event.getLevel().registryAccess());
-                    PacketDistributor.sendToAllPlayers(new MedalItemData(pet.getId(), tag));
-                    event.getLevel().playSound(null, pet.getX(), pet.getY(), pet.getZ(), SoundEvents.ARMOR_UNEQUIP_WOLF, SoundSource.NEUTRAL);
-                    event.setCanceled(true);
-                }
+            cancelInteraction(event);
+        } else if (handItem.is(Items.SHEARS)) {
+            // Vanilla shears remove the wolf armor: the medal is removed only when crouching
+            if (pet instanceof Wolf wolf && wolf.isWearingBodyArmor() && !player.isCrouching()) {
+                return;
             }
+            if (medalSlot.getStackInSlot(0).isEmpty()) {
+                player.displayClientMessage(Component.translatable("message.petprotect.has_no_medal", pet.getName().getString()), true);
+            } else {
+                pet.spawnAtLocation(medalSlot.extractItem(0, 1, false), 1);
+                PacketDistributor.sendToPlayersTrackingEntity(pet, createMedalPayload(pet));
+                event.getLevel().playSound(null, pet.getX(), pet.getY(), pet.getZ(), SoundEvents.ARMOR_UNEQUIP_WOLF, SoundSource.NEUTRAL);
+            }
+            cancelInteraction(event);
         }
     }
 
@@ -93,43 +95,41 @@ public class ServerEvent {
      */
     @SubscribeEvent
     public static void onEntityIncomingDamage(LivingIncomingDamageEvent event) {
-        if (!event.getEntity().level().isClientSide && event.getEntity() instanceof TamableAnimal pet && pet.isTame()) {
-            if (pet.getData(ModAttachments.MEDAL_ITEM).getStackInSlot(0) != ItemStack.EMPTY
-                    && event.getSource().getEntity() instanceof Player player)
-            {
-                Item item = pet.getData(ModAttachments.MEDAL_ITEM).getStackInSlot(0).getItem();
-                if (item instanceof MedalItem medal) {
-                    if (Objects.equals(player.getUUID(), pet.getOwnerUUID()) && medal.protectFromOwner()) {
-                        if (pet.isInSittingPose() && !(pet instanceof Cat)) {
-                            pet.setOrderedToSit(!pet.isOrderedToSit());
-                        }
-                        event.setCanceled(true);
-                    } else {
-                        if (pet.getOwner() instanceof Player petOwner && !player.canHarmPlayer(petOwner) && medal.protectFromTeamPlayer()) {
-                            if (pet.isInSittingPose() && !(pet instanceof Cat)) {
-                                pet.setOrderedToSit(!pet.isOrderedToSit());
-                            }
-                            event.setCanceled(true);
-                        }
-                    }
-                }
+        if (!(event.getEntity().level().isClientSide())
+            || !(event.getEntity() instanceof TamableAnimal pet)
+            || !pet.isTame()
+            || !(event.getSource().getEntity() instanceof Player attacker)
+            || !(pet.getData(ModAttachments.MEDAL_ITEM).getStackInSlot(0).getItem() instanceof MedalItem medal)
+        ) {
+            return;
+        }
+
+        boolean isOwner = Objects.equals(attacker.getUUID(), pet.getOwnerUUID());
+        boolean isProtected = isOwner ? medal.protectFromOwner() : medal.protectFromTeamPlayer() && pet.getOwner() instanceof Player owner && !attacker.canHarmPlayer(owner);
+        if (isProtected) {
+            // Wolves and parrots stand up when hurt, before this event is fired: make them sit again
+            // Cats don't stand up, and can sit on bed or chest without being ordered to
+            if (pet.isInSittingPose() && !(pet instanceof Cat)) {
+                pet.setOrderedToSit(true);
             }
+            event.setCanceled(true);
         }
     }
 
     /**
      * Save entity data on a soul medal item and let the pet
      * drop it when he dies
+     * Event priority set to lowest in case an other mod prevent entity from dying
      * @param event Event
      */
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onEntityDeath(LivingDeathEvent event) {
         // Ignore if we are on client side
         if (event.getEntity().level().isClientSide()) {
             return;
         }
         if (event.getEntity() instanceof TamableAnimal pet && pet.isTame()) {
-            if (pet.getData(ModAttachments.MEDAL_ITEM).getStackInSlot(0) != ItemStack.EMPTY) {
+            if (!pet.getData(ModAttachments.MEDAL_ITEM).getStackInSlot(0).isEmpty()) {
                 ItemStack medalStack = pet.getData(ModAttachments.MEDAL_ITEM).getStackInSlot(0);
 
                 if (medalStack.getItem() instanceof MedalItem medalItem) {
@@ -137,8 +137,9 @@ public class ServerEvent {
 
                     if (soulMedalItem.allowResurrection()) {
                         ItemStack soulMedalStack = new ItemStack(soulMedalItem);
-                        CompoundTag entityData = new CompoundTag();
-                        pet.save(entityData);
+                        // saveWithoutId save entity data even if the entity is passenger of boat or minecart
+                        CompoundTag entityData = pet.saveWithoutId(new CompoundTag());
+                        entityData.putString("id", EntityType.getKey(pet.getType()).toString());
                         soulMedalStack.set(ModDataComponent.SOUL_MEDAL_DATA, new SoulMedalDataComponent(
                                 pet.hasCustomName() ? Objects.requireNonNull(pet.getCustomName()).getString() : "",
                                 pet.getType().toShortString(),
@@ -162,9 +163,8 @@ public class ServerEvent {
      */
     @SubscribeEvent
     public static void onStartTracking(PlayerEvent.StartTracking event) {
-        if (event.getTarget() instanceof TamableAnimal pet && pet.isTame()) {
-            CompoundTag tag = pet.getData(ModAttachments.MEDAL_ITEM).serializeNBT(pet.registryAccess());
-            PacketDistributor.sendToAllPlayers(new MedalItemData(pet.getId(), tag));
+        if (event.getTarget() instanceof TamableAnimal pet && pet.isTame() && event.getEntity() instanceof ServerPlayer player) {
+            PacketDistributor.sendToPlayer(player, createMedalPayload(pet));
         }
     }
 
@@ -178,15 +178,42 @@ public class ServerEvent {
         ItemStack itemLeft = event.getLeft();
         ItemStack itemRight = event.getRight();
 
-        if (itemLeft.is(ModItems.SOUL_VESSEL.get()) && itemRight.getItem() instanceof SoulMedalItem soulMedal) {
-            if (soulMedal.allowResurrection()) {
-                ItemStack resurrectionPearlStack = ModItems.RESURRECTION_PEARL.toStack();
-                resurrectionPearlStack.set(ModDataComponent.SOUL_MEDAL_DATA, itemRight.get(ModDataComponent.SOUL_MEDAL_DATA));
+        // The soul vessel and the soul medal can be placed in any order
+        ItemStack soulMedalStack;
+        if (itemLeft.is(ModItems.SOUL_VESSEL.get())) {
+            soulMedalStack = itemRight;
+        } else if (itemRight.is(ModItems.SOUL_VESSEL.get())) {
+            soulMedalStack = itemLeft;
+        } else {
+            return;
+        }
 
-                event.setOutput(resurrectionPearlStack);
-                event.setMaterialCost(1);
-                event.setCost(2);
-            }
+        // We make sure that soul medal has data before to create resurrection pearl
+        SoulMedalDataComponent soulMedalData = soulMedalStack.get(ModDataComponent.SOUL_MEDAL_DATA);
+        if (soulMedalStack.getItem() instanceof SoulMedalItem soulMedal && soulMedal.allowResurrection() && soulMedalData != null) {
+            ItemStack resurrectionPearlStack = ModItems.RESURRECTION_PEARL.toStack();
+            resurrectionPearlStack.set(ModDataComponent.SOUL_MEDAL_DATA, soulMedalData);
+
+            event.setOutput(resurrectionPearlStack);
+            event.setMaterialCost(1);
+            event.setCost(2);
+        }
+    }
+
+    /**
+     * The anvil always consume the whole left stack:
+     * give back the extar soul vessels if they were placed on the left
+     * @param event Event
+    */
+    @SubscribeEvent
+    public static void onAnvilRepair(AnvilRepairEvent event) {
+        ItemStack itemLeft = event.getLeft();
+        if (!event.getEntity().level().isClientSide()
+            && event.getOutput().is(ModItems.RESURRECTION_PEARL.get())
+            && itemLeft.is(ModItems.SOUL_VESSEL.get())
+            && itemLeft.getCount() > 1
+        ) {
+            event.getEntity().getInventory().placeItemBackInInventory(itemLeft.copyWithCount(itemLeft.getCount() - 1));
         }
     }
 
@@ -205,5 +232,24 @@ public class ServerEvent {
             return server.getProfileCache().get(ownerUUID).map(GameProfile::getName).orElse("?");
         }
         return "?";
+    }
+
+    /**
+     * Create the payload to sync the pet medal with clients
+     * @param pet Pet
+     * @return Payload
+    */
+    private static MedalItemData createMedalPayload(TamableAnimal pet) {
+        CompoundTag tag = pet.getData(ModAttachments.MEDAL_ITEM).serializeNBT(pet.registryAccess());
+        return new MedalItemData(pet.getId(), tag);
+    }
+
+    /**
+     * Cancel the vanilla interaction, so the pet does not sit or stand up
+     * @param event Event
+    */
+    private static void cancelInteraction(PlayerInteractEvent.EntityInteract event) {
+        event.setCancellationResult(InteractionResult.SUCCESS);
+        event.setCanceled(true);
     }
 }

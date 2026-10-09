@@ -63,7 +63,7 @@ public class ParrotOnPlayerShoulderLayer extends RenderLayer<Player, PlayerModel
                 ItemStackHandler itemStackHandler = new ItemStackHandler();
                 itemStackHandler.deserializeNBT(player.level().registryAccess(), medalItemTag);
 
-                if (itemStackHandler.getStackInSlot(0) != ItemStack.EMPTY) {
+                if (!itemStackHandler.getStackInSlot(0).isEmpty()) {
                     ItemStack medalItemStack = itemStackHandler.getStackInSlot(0);
 
                     if (medalItemStack.getItem() instanceof MedalItem medalItem && medalItem.renderOnPet()) {

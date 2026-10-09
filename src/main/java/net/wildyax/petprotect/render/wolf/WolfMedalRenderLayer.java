@@ -33,7 +33,7 @@ public class WolfMedalRenderLayer extends RenderLayer<Wolf, WolfModel<Wolf>> {
             Wolf wolf,
             float v, float v1, float v2, float v3, float v4, float v5
     ) {
-        if (wolf.isTame() && wolf.getData(ModAttachments.MEDAL_ITEM).getStackInSlot(0) != ItemStack.EMPTY) {
+        if (wolf.isTame() && !wolf.getData(ModAttachments.MEDAL_ITEM).getStackInSlot(0).isEmpty()) {
             ItemStack medalItemStack = wolf.getData(ModAttachments.MEDAL_ITEM).getStackInSlot(0);
 
             if (medalItemStack.getItem() instanceof MedalItem medalItem && medalItem.renderOnPet()) {
