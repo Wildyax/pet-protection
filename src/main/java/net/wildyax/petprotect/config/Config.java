@@ -1,85 +1,87 @@
 package net.wildyax.petprotect.config;
 
 import net.neoforged.neoforge.common.ModConfigSpec;
+
 import org.apache.commons.lang3.tuple.Pair;
 
 public class Config {
 
-    public static class Common {
+    public static class Server {
 
-        public final ModConfigSpec.BooleanValue ironMedalProtectFromOwner;
-        public final ModConfigSpec.BooleanValue ironMedalProtectFromTeam;
-        public final ModConfigSpec.BooleanValue ironMedalAllowResurrection;
-        public final ModConfigSpec.BooleanValue ironMedalRenderOnPet;
+        public final ServerMedal ironMedal;
+        public final ServerMedal goldMedal;
+        public final ServerMedal diamondMedal;
 
-        public final ModConfigSpec.BooleanValue goldMedalProtectFromOwner;
-        public final ModConfigSpec.BooleanValue goldMedalProtectFromTeam;
-        public final ModConfigSpec.BooleanValue goldMedalAllowResurrection;
-        public final ModConfigSpec.BooleanValue goldMedalRenderOnPet;
-
-        public final ModConfigSpec.BooleanValue diamondMedalProtectFromOwner;
-        public final ModConfigSpec.BooleanValue diamondMedalProtectFromTeam;
-        public final ModConfigSpec.BooleanValue diamondMedalAllowResurrection;
-        public final ModConfigSpec.BooleanValue diamondMedalRenderOnPet;
-
-        Common(ModConfigSpec.Builder builder) {
-
+        Server(ModConfigSpec.Builder builder) {
             builder.push("medals");
-
-            builder.push("iron_medal");
-            ironMedalProtectFromOwner = builder
-                    .comment("The medal protect pet from his owner's damages")
-                    .define("protect_from_owner", true);
-            ironMedalProtectFromTeam = builder
-                    .comment("The medal protect pet from players of his owner's team if PVP is turned off")
-                    .define("protect_from_team", false);
-            ironMedalAllowResurrection = builder
-                    .comment("Allow the medal to create a resurrection pearl in anvil")
-                    .define("allow_resurrection", false);
-            ironMedalRenderOnPet = builder
-                    .comment("Display the medal on the pet")
-                    .define("render_on_pet", true);
-            builder.pop();
-
-            builder.push("gold_medal");
-            goldMedalProtectFromOwner = builder
-                    .comment("The medal protect pet from his owner's damages")
-                    .define("protect_from_owner", true);
-            goldMedalProtectFromTeam = builder
-                    .comment("The medal protect pet from players of his owner's team if PVP is turned off")
-                    .define("protect_from_team", true);
-            goldMedalAllowResurrection = builder
-                    .comment("Allow the medal to create a resurrection pearl in anvil")
-                    .define("allow_resurrection", false);
-            goldMedalRenderOnPet = builder
-                    .comment("Display the medal on the pet")
-                    .define("render_on_pet", true);
-            builder.pop();
-
-            builder.push("diamond_medal");
-            diamondMedalProtectFromOwner = builder
-                    .comment("The medal protect pet from his owner's damages")
-                    .define("protect_from_owner", true);
-            diamondMedalProtectFromTeam = builder
-                    .comment("The medal protect pet from players of his owner's team if PVP is turned off")
-                    .define("protect_from_team", true);
-            diamondMedalAllowResurrection = builder
-                    .comment("Allow the medal to create a resurrection pearl in anvil")
-                    .define("allow_resurrection", true);
-            diamondMedalRenderOnPet = builder
-                    .comment("Display the medal on the pet")
-                    .define("render_on_pet", true);
-            builder.pop();
-
+            ironMedal = new ServerMedal(builder, "iron_medal", true, false, false);
+            goldMedal = new ServerMedal(builder, "gold_medal", true, true, false);
+            diamondMedal = new ServerMedal(builder, "diamond_medal", true, true, true);
             builder.pop();
         }
     }
 
-    public static final ModConfigSpec COMMON_SPEC;
-    public static final Common COMMON;
+    public static class ServerMedal {
+
+        public final ModConfigSpec.BooleanValue protectFromOwner;
+        public final ModConfigSpec.BooleanValue protectFromTeam;
+        public final ModConfigSpec.BooleanValue allowResurrection;
+
+        ServerMedal(ModConfigSpec.Builder builder, String name, boolean protectFromOwnerDefault, boolean protectFromTeamDefault, boolean allowResurrectionDefault) {
+            builder.push(name);
+            protectFromOwner = builder
+                .comment("The medal protects the pet from it's owner's damage")
+                .define("protect_from_owner", protectFromOwnerDefault);
+            protectFromTeam = builder
+                .comment("The medal protects the pet from it's owner's teammates if PVP is turned off")
+                .define("protect_from_team", protectFromTeamDefault);
+            allowResurrection = builder
+                .comment("The pet drops a soul medal when it dies, to craft a resurrection pearl in an anvil")
+                .define("allow_resurrection", allowResurrectionDefault);
+            builder.pop();
+        }
+    }
+
+    public static class Client {
+
+        public final ClientMedal ironMedal;
+        public final ClientMedal goldMedal;
+        public final ClientMedal diamondMedal;
+
+        Client(ModConfigSpec.Builder builder) {
+            builder.push("medals");
+            ironMedal = new ClientMedal(builder, "iron_medal");
+            goldMedal = new ClientMedal(builder, "gold_medal");
+            diamondMedal = new ClientMedal(builder, "diamond_medal");
+            builder.pop();
+        }
+    }
+
+    public static class ClientMedal {
+
+        public final ModConfigSpec.BooleanValue renderOnPet;
+
+        ClientMedal(ModConfigSpec.Builder builder, String name) {
+            builder.push(name);
+            renderOnPet = builder
+                .comment("Display the medal on the pet")
+                .define("render_on_pet", true);
+            builder.pop();
+        }
+    }
+
+    public static final ModConfigSpec SERVER_SPEC;
+    public static final Server SERVER;
+    public static final ModConfigSpec CLIENT_SPEC;
+    public static final Client CLIENT;
+
     static {
-        final Pair<Common, ModConfigSpec> specPair = new ModConfigSpec.Builder().configure(Common::new);
-        COMMON = specPair.getLeft();
-        COMMON_SPEC = specPair.getRight();
+        final Pair<Server, ModConfigSpec> serverPair = new ModConfigSpec.Builder().configure(Server::new);
+        SERVER = serverPair.getLeft();
+        SERVER_SPEC = serverPair.getRight();
+
+        final Pair<Client, ModConfigSpec> clientPair = new ModConfigSpec.Builder().configure(Client::new);
+        CLIENT = clientPair.getLeft();
+        CLIENT_SPEC = clientPair.getRight();
     }
 }

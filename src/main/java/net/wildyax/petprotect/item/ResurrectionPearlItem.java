@@ -42,7 +42,7 @@ public class ResurrectionPearlItem extends Item implements ProjectileItem {
             level.addFreshEntity(resurrectionPearl);
         }
 
-        itemstack.consume(1, player);
+        itemstack.shrink(1);
         return InteractionResultHolder.sidedSuccess(itemstack, level.isClientSide());
     }
 

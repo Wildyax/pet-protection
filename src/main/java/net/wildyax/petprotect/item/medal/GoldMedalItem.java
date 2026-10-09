@@ -13,17 +13,17 @@ public class GoldMedalItem extends MedalItem {
 
     @Override
     public boolean protectFromOwner() {
-        return Config.COMMON.goldMedalProtectFromOwner.get();
+        return Config.SERVER.goldMedal.protectFromOwner.get();
     }
 
     @Override
     public boolean protectFromTeamPlayer() {
-        return Config.COMMON.goldMedalProtectFromTeam.get();
+        return Config.SERVER.goldMedal.protectFromTeam.get();
     }
 
     @Override
     public boolean renderOnPet() {
-        return Config.COMMON.goldMedalRenderOnPet.get();
+        return Config.CLIENT.goldMedal.renderOnPet.get();
     }
 
     @Override

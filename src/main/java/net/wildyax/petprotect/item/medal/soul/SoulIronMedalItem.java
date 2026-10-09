@@ -12,7 +12,7 @@ public class SoulIronMedalItem extends SoulMedalItem {
 
     @Override
     public boolean allowResurrection() {
-        return Config.COMMON.ironMedalAllowResurrection.get();
+        return Config.SERVER.ironMedal.allowResurrection.get();
     }
 
     @Override

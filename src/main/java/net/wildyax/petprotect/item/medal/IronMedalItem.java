@@ -13,17 +13,17 @@ public class IronMedalItem extends MedalItem {
 
     @Override
     public boolean protectFromOwner() {
-        return Config.COMMON.ironMedalProtectFromOwner.get();
+        return Config.SERVER.ironMedal.protectFromOwner.get();
     }
 
     @Override
     public boolean protectFromTeamPlayer() {
-        return Config.COMMON.ironMedalProtectFromTeam.get();
+        return Config.SERVER.ironMedal.protectFromTeam.get();
     }
 
     @Override
     public boolean renderOnPet() {
-        return Config.COMMON.ironMedalRenderOnPet.get();
+        return Config.CLIENT.ironMedal.renderOnPet.get();
     }
 
     @Override

@@ -19,8 +19,10 @@
   "tooltip.petprotect.resurrection_pearl.pet_name": "§7Soul of§r §9%s§r",
 
   "petprotect.configuration.title": "Pet Protect Configuration",
-  "petprotect.configuration.section.petprotect.common.toml": "Common Settings",
-  "petprotect.configuration.section.petprotect.common.toml.title": "Pet Protect Common Settings",
+  "petprotect.configuration.section.petprotect.server.toml": "Server Settings",
+  "petprotect.configuration.section.petprotect.server.toml.title": "Pet Protect Server Settings",
+  "petprotect.configuration.section.petprotect.client.toml": "Client Settings",
+  "petprotect.configuration.section.petprotect.client.toml.title": "Pet Protect Client Settings",
 
   "petprotect.configuration.protect_from_owner": "Protect from owner",
   "petprotect.configuration.protect_from_owner.tooltip": "The medal protect pet from his owner's damages",

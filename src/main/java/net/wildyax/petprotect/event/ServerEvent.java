@@ -95,7 +95,7 @@ public class ServerEvent {
      */
     @SubscribeEvent
     public static void onEntityIncomingDamage(LivingIncomingDamageEvent event) {
-        if (!(event.getEntity().level().isClientSide())
+        if (event.getEntity().level().isClientSide()
             || !(event.getEntity() instanceof TamableAnimal pet)
             || !pet.isTame()
             || !(event.getSource().getEntity() instanceof Player attacker)

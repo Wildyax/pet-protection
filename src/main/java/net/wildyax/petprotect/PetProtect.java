@@ -28,6 +28,7 @@ public class PetProtect
         ModAttachments.register(modEventBus);
         ModDataComponent.register(modEventBus);
 
-        modContainer.registerConfig(ModConfig.Type.COMMON, Config.COMMON_SPEC);
+        modContainer.registerConfig(ModConfig.Type.SERVER, Config.SERVER_SPEC);
+        modContainer.registerConfig(ModConfig.Type.CLIENT, Config.CLIENT_SPEC);
     }
 }
