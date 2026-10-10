@@ -1,5 +1,6 @@
 package net.wildyax.petprotect.item;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Position;
 import net.minecraft.network.chat.Component;
@@ -7,6 +8,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.Item;
@@ -59,8 +61,11 @@ public class ResurrectionPearlItem extends Item implements ProjectileItem {
         if (soulMedalData == null) {
             tooltipComponents.add(Component.translatable("tooltip.petprotect.no_pet_assigned"));
         } else {
-            String petName = soulMedalData.entityTagName().isEmpty() ? "§f"+soulMedalData.entityType()+"§r" : "§9"+soulMedalData.entityTagName()+"§r";
-            tooltipComponents.add(Component.translatable("tooltip.petprotect.resurrection_pearl.pet_name", petName));
+            Component petName = soulMedalData.entityTagName().isEmpty()
+                ? EntityType.byString(soulMedalData.entityType()).map(EntityType::getDescription).orElse(Component.literal(soulMedalData.entityType()))
+                : Component.literal(soulMedalData.entityTagName()).withStyle(ChatFormatting.BLUE);
+
+            tooltipComponents.add(Component.translatable("tooltip.petprotect.resurrection_pearl.pet_name", petName).withStyle(ChatFormatting.GRAY));
         }
     }
 }

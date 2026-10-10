@@ -8,13 +8,13 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.wildyax.petprotect.PetProtect;
 
-public record MedalItemData(Integer entityID, CompoundTag itemTag) implements CustomPacketPayload {
+public record MedalItemData(int entityID, CompoundTag itemTag) implements CustomPacketPayload {
 
     public static final CustomPacketPayload.Type<MedalItemData> TYPE =
             new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(PetProtect.MOD_ID, "medal_item_data"));
 
     public static final StreamCodec<ByteBuf, MedalItemData> STREAM_CODEC = StreamCodec.composite(
-            ByteBufCodecs.INT,
+            ByteBufCodecs.VAR_INT,
             MedalItemData::entityID,
             ByteBufCodecs.COMPOUND_TAG,
             MedalItemData::itemTag,

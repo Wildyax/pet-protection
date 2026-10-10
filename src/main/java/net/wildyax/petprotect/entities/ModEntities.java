@@ -23,6 +23,8 @@ public class ModEntities {
                             MobCategory.MISC
                     )
                             .sized(0.25f, 0.25f)
+                            .clientTrackingRange(4)
+                            .updateInterval(10)
                             .build("resurrection_pearl")
             );
 

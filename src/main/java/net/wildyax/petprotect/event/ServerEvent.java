@@ -69,7 +69,7 @@ public class ServerEvent {
                 PacketDistributor.sendToPlayersTrackingEntity(pet, createMedalPayload(pet));
                 event.getLevel().playSound(null, pet.getX(), pet.getY(), pet.getZ(), SoundEvents.ARMOR_EQUIP_WOLF.value(), SoundSource.NEUTRAL);
             } else {
-                player.displayClientMessage(Component.translatable("message.petprotect.has_medal", pet.getName().getString()), true);
+                player.displayClientMessage(Component.translatable("message.petprotect.has_medal", pet.getName()), true);
             }
             cancelInteraction(event);
         } else if (handItem.is(Items.SHEARS)) {
@@ -78,7 +78,7 @@ public class ServerEvent {
                 return;
             }
             if (medalSlot.getStackInSlot(0).isEmpty()) {
-                player.displayClientMessage(Component.translatable("message.petprotect.has_no_medal", pet.getName().getString()), true);
+                player.displayClientMessage(Component.translatable("message.petprotect.has_no_medal", pet.getName()), true);
             } else {
                 pet.spawnAtLocation(medalSlot.extractItem(0, 1, false), 1);
                 PacketDistributor.sendToPlayersTrackingEntity(pet, createMedalPayload(pet));
@@ -142,7 +142,7 @@ public class ServerEvent {
                         entityData.putString("id", EntityType.getKey(pet.getType()).toString());
                         soulMedalStack.set(ModDataComponent.SOUL_MEDAL_DATA, new SoulMedalDataComponent(
                                 pet.hasCustomName() ? Objects.requireNonNull(pet.getCustomName()).getString() : "",
-                                pet.getType().toShortString(),
+                                EntityType.getKey(pet.getType()).toString(),
                                 getOwnerName(pet),
                                 entityData
                         ));

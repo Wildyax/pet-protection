@@ -30,10 +30,10 @@ public class Config {
         ServerMedal(ModConfigSpec.Builder builder, String name, boolean protectFromOwnerDefault, boolean protectFromTeamDefault, boolean allowResurrectionDefault) {
             builder.push(name);
             protectFromOwner = builder
-                .comment("The medal protects the pet from it's owner's damage")
+                .comment("The medal protects the pet from its owner's damage")
                 .define("protect_from_owner", protectFromOwnerDefault);
             protectFromTeam = builder
-                .comment("The medal protects the pet from it's owner's teammates if PVP is turned off")
+                .comment("The medal protects the pet from its owner's teammates, or from all players if PVP is turned off")
                 .define("protect_from_team", protectFromTeamDefault);
             allowResurrection = builder
                 .comment("The pet drops a soul medal when it dies, to craft a resurrection pearl in an anvil")
