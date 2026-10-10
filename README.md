@@ -117,3 +117,7 @@ The settings can be changed in game: **Mods** menu → **Pet Protection** → **
 ## Credits
 
 Made by **Wildyax** and **Rafidelf**.
+
+## License
+
+This mod is available under the [MIT License](LICENSE).
