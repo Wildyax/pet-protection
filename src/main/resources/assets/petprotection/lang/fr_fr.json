@@ -1,0 +1,52 @@
+{
+  "fml.menu.mods.info.description.petprotection": "Ne blessez plus jamais vos chers compagnons par accident !",
+
+  "creative_tab.petprotection.pet_protection": "Pet Protection",
+
+  "item.petprotection.iron_medal": "Médaille en fer",
+  "item.petprotection.gold_medal": "Médaille en or",
+  "item.petprotection.diamond_medal": "Médaille en diamant",
+  "item.petprotection.soul_iron_medal": "Médaille d'âme en fer",
+  "item.petprotection.soul_gold_medal": "Médaille d'âme en or",
+  "item.petprotection.soul_diamond_medal": "Médaille d'âme en diamant",
+  "item.petprotection.soul_vessel": "Réceptacle d'âme",
+  "item.petprotection.resurrection_pearl": "Perle de résurrection",
+
+  "entity.petprotection.resurrection_pearl": "Perle de résurrection",
+
+  "message.petprotection.has_medal": "%s a déjà une médaille",
+  "message.petprotection.has_no_medal": "%s n'a pas de médaille",
+
+  "tooltip.petprotection.no_pet_assigned": "Aucun animal associé",
+  "tooltip.petprotection.soul_medal.pet_name": "Médaille de %s",
+  "tooltip.petprotection.soul_medal.pet_owner": "Propriétaire : %s",
+  "tooltip.petprotection.resurrection_pearl.pet_name": "Âme de %s",
+
+  "petprotection.configuration.title": "Configuration de Pet Protection",
+  "petprotection.configuration.section.petprotection.server.toml": "Paramètres du serveur",
+  "petprotection.configuration.section.petprotection.server.toml.title": "Pet Protection : paramètres du serveur",
+  "petprotection.configuration.section.petprotection.client.toml": "Paramètres du client",
+  "petprotection.configuration.section.petprotection.client.toml.title": "Pet Protection : paramètres du client",
+
+  "petprotection.configuration.protect_from_owner": "Protéger du propriétaire",
+  "petprotection.configuration.protect_from_owner.tooltip": "La médaille protège l'animal des coups de son propriétaire",
+  "petprotection.configuration.protect_from_team": "Protéger des coéquipiers",
+  "petprotection.configuration.protect_from_team.tooltip": "La médaille protège l'animal des coéquipiers de son propriétaire, ou de tous les joueurs si le PVP est désactivé",
+  "petprotection.configuration.allow_resurrection": "Autoriser la résurrection",
+  "petprotection.configuration.allow_resurrection.tooltip": "L'animal lâche une médaille d'âme à sa mort. Combinez-la avec un réceptacle d'âme dans une enclume pour obtenir une perle de résurrection",
+  "petprotection.configuration.render_on_pet": "Afficher sur l'animal",
+  "petprotection.configuration.render_on_pet.tooltip": "Affiche la médaille sur l'animal",
+
+  "petprotection.configuration.medals": "Médailles",
+  "petprotection.configuration.medals.button": "Modifier",
+  "petprotection.configuration.medals.tooltip": "Paramètres des médailles",
+  "petprotection.configuration.iron_medal": "Médaille en fer",
+  "petprotection.configuration.iron_medal.button": "Modifier",
+  "petprotection.configuration.iron_medal.tooltip": "Paramètres de la médaille en fer",
+  "petprotection.configuration.gold_medal": "Médaille en or",
+  "petprotection.configuration.gold_medal.button": "Modifier",
+  "petprotection.configuration.gold_medal.tooltip": "Paramètres de la médaille en or",
+  "petprotection.configuration.diamond_medal": "Médaille en diamant",
+  "petprotection.configuration.diamond_medal.button": "Modifier",
+  "petprotection.configuration.diamond_medal.tooltip": "Paramètres de la médaille en diamant"
+}

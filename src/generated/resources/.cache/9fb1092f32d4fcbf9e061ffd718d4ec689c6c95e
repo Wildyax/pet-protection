@@ -1,9 +1,9 @@
-// 1.21.1	2025-02-15T14:52:49.6417596	Recipes
-43120410c7e971ad9f9b7ba359b4a8e9455e1848 data/petprotect/advancement/recipes/misc/diamond_medal.json
-180a3f15bb07a95c6f8099d5f4b28c997b18e8c8 data/petprotect/advancement/recipes/misc/gold_medal.json
-6760f7c3a025564555bad09f0a06789063d00346 data/petprotect/advancement/recipes/misc/iron_medal.json
-42cc892613925252232f86120eddf6a57a513349 data/petprotect/advancement/recipes/misc/soul_vessel.json
-6b52051a687f384dc6582a61ad1981bbab97c175 data/petprotect/recipe/diamond_medal.json
-151b14749b885325d1d3c48bcceb4b32917791f0 data/petprotect/recipe/gold_medal.json
-19517edff63a01e764b9e7cbff869f61ae89f40c data/petprotect/recipe/iron_medal.json
-bd989e216a653bdb0b10e586ae3dbcf1998f0dac data/petprotect/recipe/soul_vessel.json
+// 1.21.1	2026-10-10T16:14:08.510925988	Recipes
+a6b87f95ec1d2add4712fd498706dd900bbd62a2 data/petprotection/advancement/recipes/misc/diamond_medal.json
+e3ab106895649ee7176b2f9305f2e27b92801f82 data/petprotection/advancement/recipes/misc/gold_medal.json
+a918ee40682d109cdaa7cecae054a3f16fcdd52f data/petprotection/advancement/recipes/misc/iron_medal.json
+0dc8ffb2d43098bd3362f8ef7aeffa335f178e6e data/petprotection/advancement/recipes/misc/soul_vessel.json
+00cebe43610dc33fbf4b52492c552f548a0a3925 data/petprotection/recipe/diamond_medal.json
+f6bceb55981690c73652d9650c685a8827871b94 data/petprotection/recipe/gold_medal.json
+075d3d0bb5dc43b5747d2222cf84eff64e3ee51a data/petprotection/recipe/iron_medal.json
+ade5fb87d3cce6c9cd76ff8559b4cedf9a04baa3 data/petprotection/recipe/soul_vessel.json

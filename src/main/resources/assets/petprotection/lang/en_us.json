@@ -1,0 +1,52 @@
+{
+  "fml.menu.mods.info.description.petprotection": "Don't accidentally hurt your dear loved friends anymore!",
+
+  "creative_tab.petprotection.pet_protection": "Pet Protection",
+
+  "item.petprotection.iron_medal": "Iron Medal",
+  "item.petprotection.gold_medal": "Gold Medal",
+  "item.petprotection.diamond_medal": "Diamond Medal",
+  "item.petprotection.soul_iron_medal": "Soul Iron Medal",
+  "item.petprotection.soul_gold_medal": "Soul Gold Medal",
+  "item.petprotection.soul_diamond_medal": "Soul Diamond Medal",
+  "item.petprotection.soul_vessel": "Soul Vessel",
+  "item.petprotection.resurrection_pearl": "Resurrection Pearl",
+
+  "entity.petprotection.resurrection_pearl": "Resurrection Pearl",
+
+  "message.petprotection.has_medal": "%s already has a medal",
+  "message.petprotection.has_no_medal": "%s doesn't have a medal",
+
+  "tooltip.petprotection.no_pet_assigned": "No pet assigned",
+  "tooltip.petprotection.soul_medal.pet_name": "Medal of %s",
+  "tooltip.petprotection.soul_medal.pet_owner": "Owner: %s",
+  "tooltip.petprotection.resurrection_pearl.pet_name": "Soul of %s",
+
+  "petprotection.configuration.title": "Pet Protection Configuration",
+  "petprotection.configuration.section.petprotection.server.toml": "Server Settings",
+  "petprotection.configuration.section.petprotection.server.toml.title": "Pet Protection Server Settings",
+  "petprotection.configuration.section.petprotection.client.toml": "Client Settings",
+  "petprotection.configuration.section.petprotection.client.toml.title": "Pet Protection Client Settings",
+
+  "petprotection.configuration.protect_from_owner": "Protect from owner",
+  "petprotection.configuration.protect_from_owner.tooltip": "The medal protects the pet from its owner's damage",
+  "petprotection.configuration.protect_from_team": "Protect from teammates",
+  "petprotection.configuration.protect_from_team.tooltip": "The medal protects the pet from its owner's teammates, or from all players if PVP is turned off",
+  "petprotection.configuration.allow_resurrection": "Allow resurrection",
+  "petprotection.configuration.allow_resurrection.tooltip": "The pet drops a soul medal when it dies. Combine it with a soul vessel in an anvil to craft a resurrection pearl",
+  "petprotection.configuration.render_on_pet": "Show on pet",
+  "petprotection.configuration.render_on_pet.tooltip": "Display the medal on the pet",
+
+  "petprotection.configuration.medals": "Medals",
+  "petprotection.configuration.medals.button": "Edit",
+  "petprotection.configuration.medals.tooltip": "Medal settings",
+  "petprotection.configuration.iron_medal": "Iron Medal",
+  "petprotection.configuration.iron_medal.button": "Edit",
+  "petprotection.configuration.iron_medal.tooltip": "Iron medal settings",
+  "petprotection.configuration.gold_medal": "Gold Medal",
+  "petprotection.configuration.gold_medal.button": "Edit",
+  "petprotection.configuration.gold_medal.tooltip": "Gold medal settings",
+  "petprotection.configuration.diamond_medal": "Diamond Medal",
+  "petprotection.configuration.diamond_medal.button": "Edit",
+  "petprotection.configuration.diamond_medal.tooltip": "Diamond medal settings"
+}

@@ -1,14 +1,14 @@
 <p align="center">
-  <img src="docs/images/logo.png" alt="Pet Protect">
+  <img src="docs/images/logo.png" alt="Pet Protection">
 </p>
 
-<h1 align="center">Pet Protect</h1>
+<h1 align="center">Pet Protection</h1>
 
 <p align="center"><b>Don't accidentally hurt your dear loved friends anymore!</b></p>
 
 ---
 
-You swing your sword at a zombie, your wolf jumps in front of you… and it's gone. **Pet Protect** puts an end to these tragedies.
+You swing your sword at a zombie, your wolf jumps in front of you… and it's gone. **Pet Protection** puts an end to these tragedies.
 
 Craft a **medal**, put it on your pet, and it becomes immune to your hits. With the best medals, your pet is also protected from your teammates, and it can even **come back from the dead**.
 
@@ -99,7 +99,7 @@ Put the **soul medal** and the **soul vessel** in an **anvil** (in any order). I
 
 ## ⚙️ Configuration
 
-The settings can be changed in game: **Mods** menu → **Pet Protect** → **Config**. Each medal has its own settings.
+The settings can be changed in game: **Mods** menu → **Pet Protection** → **Config**. Each medal has its own settings.
 
 | Setting | Side | Description |
 |---|---|---|

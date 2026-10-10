@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "petprotect:item/soul_diamond_medal"
-  }
-}

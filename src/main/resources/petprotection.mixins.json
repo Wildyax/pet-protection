@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "net.wildyax.petprotection.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [],
+  "client": [
+    "WolfModelAccessor",
+    "OcelotModelAccessor"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
