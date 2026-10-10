@@ -63,6 +63,14 @@ Once your pet wears a medal, your hits (sword, arrows, tridents…) no longer hu
 
 With a **gold** or **diamond** medal, your pet is also protected from your **teammates**. If PVP is disabled on the server, it is protected from **every player**.
 
+> Teammates are players in the same vanilla team, with **friendly fire turned off**. An operator can set it up with these commands:
+>
+> ```
+> /team add friends
+> /team join friends Alice Bob
+> /team modify friends friendlyFire false
+> ```
+
 ## Resurrection
 
 Even with a medal, your pet can still die from mobs, lava or a long fall. With a **diamond medal**, this is not the end!
