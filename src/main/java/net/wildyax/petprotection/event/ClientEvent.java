@@ -1,13 +1,13 @@
 package net.wildyax.petprotection.event;
 
-import net.minecraft.client.model.PlayerModel;
+import net.minecraft.client.model.player.PlayerModel;
 import net.minecraft.client.renderer.entity.CatRenderer;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.ParrotRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.entity.WolfRenderer;
-import net.minecraft.client.resources.PlayerSkin;
+import net.minecraft.world.entity.player.PlayerSkin;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.api.distmarker.Dist;
@@ -21,7 +21,7 @@ import net.wildyax.petprotection.render.ParrotMedalRenderLayer;
 import net.wildyax.petprotection.render.ParrotOnPlayerShoulderLayer;
 import net.wildyax.petprotection.render.WolfMedalRenderLayer;
 
-@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD, modid = PetProtection.MOD_ID, value = Dist.CLIENT)
+@EventBusSubscriber(modid = PetProtection.MOD_ID, value = Dist.CLIENT)
 public class ClientEvent {
 
     /**

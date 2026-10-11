@@ -2,13 +2,13 @@ package net.wildyax.petprotection.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import net.minecraft.client.model.ParrotModel;
+import net.minecraft.client.model.animal.parrot.ParrotModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.world.entity.animal.Parrot;
+import net.minecraft.world.entity.animal.parrot.Parrot;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -33,7 +33,7 @@ public class ParrotMedalRenderLayer extends RenderLayer<Parrot, ParrotModel> {
             Parrot parrot,
             float v, float v1, float v2, float v3, float v4, float v5
     ) {
-        ItemStack medalItemStack = parrot.getData(ModAttachments.MEDAL_ITEM).getStackInSlot(0);
+        ItemStack medalItemStack = parrot.getData(ModAttachments.MEDAL_ITEM);
 
         if (parrot.isTame() && medalItemStack.getItem() instanceof MedalItem medalItem && medalItem.renderOnPet()) {
             poseStack.pushPose();

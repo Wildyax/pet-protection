@@ -11,7 +11,7 @@ import net.wildyax.petprotection.PetProtection;
 
 import java.util.concurrent.CompletableFuture;
 
-@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD, modid = PetProtection.MOD_ID)
+@EventBusSubscriber(modid = PetProtection.MOD_ID)
 public class DataGenHandler {
 
     @SubscribeEvent

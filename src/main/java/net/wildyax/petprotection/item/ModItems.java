@@ -16,43 +16,31 @@ public class ModItems {
 
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(PetProtection.MOD_ID);
 
-    public static final DeferredItem<Item> IRON_MEDAL = ITEMS.register("iron_medal",
-            () -> new IronMedalItem(new Item.Properties())
-    );
-    public static final DeferredItem<Item> SOUL_IRON_MEDAL = ITEMS.register("soul_iron_medal",
-            () -> new SoulIronMedalItem(new Item.Properties()
-                    .stacksTo(1)
-                    .fireResistant()
-            )
+    public static final DeferredItem<Item> IRON_MEDAL = ITEMS.registerItem("iron_medal", IronMedalItem::new );
+    public static final DeferredItem<Item> SOUL_IRON_MEDAL = ITEMS.registerItem("soul_iron_medal", SoulIronMedalItem::new,
+        props -> props
+            .stacksTo(1)
+            .fireResistant()
     );
 
-    public static final DeferredItem<Item> GOLD_MEDAL = ITEMS.register("gold_medal",
-            () -> new GoldMedalItem(new Item.Properties())
-    );
-    public static final DeferredItem<Item> SOUL_GOLD_MEDAL = ITEMS.register("soul_gold_medal",
-            () -> new SoulGoldMedalItem(new Item.Properties()
-                    .stacksTo(1)
-                    .fireResistant()
-            )
+    public static final DeferredItem<Item> GOLD_MEDAL = ITEMS.registerItem("gold_medal", GoldMedalItem::new );
+    public static final DeferredItem<Item> SOUL_GOLD_MEDAL = ITEMS.registerItem("soul_gold_medal", SoulGoldMedalItem::new,
+        props -> props
+            .stacksTo(1)
+            .fireResistant()
     );
 
-    public static final DeferredItem<Item> DIAMOND_MEDAL = ITEMS.register("diamond_medal",
-            () -> new DiamondMedalItem(new Item.Properties())
-    );
-    public static final DeferredItem<Item> SOUL_DIAMOND_MEDAL = ITEMS.register("soul_diamond_medal",
-            () -> new SoulDiamondMedalItem(new Item.Properties()
-                    .stacksTo(1)
-                    .fireResistant()
-            )
+    public static final DeferredItem<Item> DIAMOND_MEDAL = ITEMS.registerItem("diamond_medal", DiamondMedalItem::new );
+    public static final DeferredItem<Item> SOUL_DIAMOND_MEDAL = ITEMS.registerItem("soul_diamond_medal", SoulDiamondMedalItem::new,
+        props -> props
+            .stacksTo(1)
+            .fireResistant()
     );
 
-    public static final DeferredItem<Item> SOUL_VESSEL = ITEMS.register("soul_vessel",
-            () -> new Item(new Item.Properties())
-    );
-    public static final DeferredItem<Item> RESURRECTION_PEARL = ITEMS.register("resurrection_pearl",
-            () -> new ResurrectionPearlItem(new Item.Properties()
-                    .stacksTo(1)
-            )
+    public static final DeferredItem<Item> SOUL_VESSEL = ITEMS.registerSimpleItem("soul_vessel");
+    public static final DeferredItem<Item> RESURRECTION_PEARL = ITEMS.registerItem("resurrection_pearl", ResurrectionPearlItem::new,
+        props -> props
+            .stacksTo(1)
     );
 
     public static void register(IEventBus eventBus) {

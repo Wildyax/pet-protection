@@ -9,7 +9,7 @@ import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.world.entity.animal.Cat;
+import net.minecraft.world.entity.animal.feline.Cat;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.wildyax.petprotection.item.medal.MedalItem;
@@ -34,7 +34,7 @@ public class CatMedalRenderLayer extends RenderLayer<Cat, CatModel<Cat>> {
             Cat cat,
             float v, float v1, float v2, float v3, float v4, float v5
     ) {
-        ItemStack medalItemStack = cat.getData(ModAttachments.MEDAL_ITEM).getStackInSlot(0);
+        ItemStack medalItemStack = cat.getData(ModAttachments.MEDAL_ITEM);
 
         if (cat.isTame() && medalItemStack.getItem() instanceof MedalItem medalItem && medalItem.renderOnPet()) {
             poseStack.pushPose();

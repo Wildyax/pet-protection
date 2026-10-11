@@ -2,14 +2,14 @@ package net.wildyax.petprotection.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import net.minecraft.client.model.WolfModel;
+import net.minecraft.client.model.animal.wolf.WolfModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.entity.animal.wolf.Wolf;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.wildyax.petprotection.item.medal.MedalItem;
@@ -33,8 +33,8 @@ public class WolfMedalRenderLayer extends RenderLayer<Wolf, WolfModel<Wolf>> {
             Wolf wolf,
             float v, float v1, float v2, float v3, float v4, float v5
     ) {
-        if (wolf.isTame() && !wolf.getData(ModAttachments.MEDAL_ITEM).getStackInSlot(0).isEmpty()) {
-            ItemStack medalItemStack = wolf.getData(ModAttachments.MEDAL_ITEM).getStackInSlot(0);
+        if (wolf.isTame() && !wolf.getData(ModAttachments.MEDAL_ITEM).isEmpty()) {
+            ItemStack medalItemStack = wolf.getData(ModAttachments.MEDAL_ITEM);
 
             if (medalItemStack.getItem() instanceof MedalItem medalItem && medalItem.renderOnPet()) {
 

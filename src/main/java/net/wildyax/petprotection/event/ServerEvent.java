@@ -3,14 +3,14 @@ package net.wildyax.petprotection.event;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.TamableAnimal;
-import net.minecraft.world.entity.animal.Cat;
-import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.entity.animal.feline.Cat;
+import net.minecraft.world.entity.animal.wolf.Wolf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -21,17 +21,13 @@ import net.neoforged.neoforge.event.AnvilUpdateEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.AnvilRepairEvent;
-import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
-import net.neoforged.neoforge.items.ItemStackHandler;
-import net.neoforged.neoforge.network.PacketDistributor;
 import net.wildyax.petprotection.PetProtection;
 import net.wildyax.petprotection.component.ModDataComponent;
 import net.wildyax.petprotection.component.SoulMedalDataComponent;
 import net.wildyax.petprotection.item.ModItems;
 import net.wildyax.petprotection.item.medal.MedalItem;
 import net.wildyax.petprotection.item.medal.soul.SoulMedalItem;
-import net.wildyax.petprotection.network.MedalItemData;
 import net.wildyax.petprotection.utils.ModAttachments;
 
 import java.util.Objects;
@@ -39,7 +35,7 @@ import java.util.UUID;
 
 import com.mojang.authlib.GameProfile;
 
-@EventBusSubscriber(bus = EventBusSubscriber.Bus.GAME, modid = PetProtection.MOD_ID)
+@EventBusSubscriber(modid = PetProtection.MOD_ID)
 public class ServerEvent {
 
     /**
@@ -60,13 +56,12 @@ public class ServerEvent {
             return;
         }
 
-        ItemStackHandler medalSlot = pet.getData(ModAttachments.MEDAL_ITEM);
+        ItemStack medalStack = pet.getData(ModAttachments.MEDAL_ITEM);
 
         if (handItem.getItem() instanceof MedalItem) {
-            if (medalSlot.getStackInSlot(0).isEmpty()) {
-                medalSlot.insertItem(0, handItem.copyWithCount(1), false);
+            if (medalStack.isEmpty()) {
+                pet.setData(ModAttachments.MEDAL_ITEM, handItem.copyWithCount(1));
                 handItem.consume(1, player);
-                PacketDistributor.sendToPlayersTrackingEntity(pet, createMedalPayload(pet));
                 event.getLevel().playSound(null, pet.getX(), pet.getY(), pet.getZ(), SoundEvents.ARMOR_EQUIP_WOLF.value(), SoundSource.NEUTRAL);
             } else {
                 player.displayClientMessage(Component.translatable("message.petprotection.has_medal", pet.getName()), true);
@@ -77,12 +72,12 @@ public class ServerEvent {
             if (pet instanceof Wolf wolf && wolf.isWearingBodyArmor() && !player.isCrouching()) {
                 return;
             }
-            if (medalSlot.getStackInSlot(0).isEmpty()) {
+            if (medalStack.isEmpty()) {
                 player.displayClientMessage(Component.translatable("message.petprotection.has_no_medal", pet.getName()), true);
-            } else {
-                pet.spawnAtLocation(medalSlot.extractItem(0, 1, false), 1);
-                PacketDistributor.sendToPlayersTrackingEntity(pet, createMedalPayload(pet));
-                event.getLevel().playSound(null, pet.getX(), pet.getY(), pet.getZ(), SoundEvents.ARMOR_UNEQUIP_WOLF, SoundSource.NEUTRAL);
+            } else if (event.getLevel() instanceof ServerLevel level) {
+                pet.spawnAtLocation(level, medalStack, 1);
+                pet.setData(ModAttachments.MEDAL_ITEM, ItemStack.EMPTY);
+                level.playSound(null, pet.getX(), pet.getY(), pet.getZ(), SoundEvents.ARMOR_UNEQUIP_WOLF, SoundSource.NEUTRAL);
             }
             cancelInteraction(event);
         }
@@ -99,7 +94,7 @@ public class ServerEvent {
             || !(event.getEntity() instanceof TamableAnimal pet)
             || !pet.isTame()
             || !(event.getSource().getEntity() instanceof Player attacker)
-            || !(pet.getData(ModAttachments.MEDAL_ITEM).getStackInSlot(0).getItem() instanceof MedalItem medal)
+            || !(pet.getData(ModAttachments.MEDAL_ITEM).getItem() instanceof MedalItem medal)
         ) {
             return;
         }
@@ -128,9 +123,9 @@ public class ServerEvent {
         if (event.getEntity().level().isClientSide()) {
             return;
         }
-        if (event.getEntity() instanceof TamableAnimal pet && pet.isTame()) {
-            if (!pet.getData(ModAttachments.MEDAL_ITEM).getStackInSlot(0).isEmpty()) {
-                ItemStack medalStack = pet.getData(ModAttachments.MEDAL_ITEM).getStackInSlot(0);
+        if (event.getEntity() instanceof TamableAnimal pet && pet.isTame() && event.getEntity().level() instanceof ServerLevel level) {
+            if (!pet.getData(ModAttachments.MEDAL_ITEM).isEmpty()) {
+                ItemStack medalStack = pet.getData(ModAttachments.MEDAL_ITEM);
 
                 if (medalStack.getItem() instanceof MedalItem medalItem) {
                     SoulMedalItem soulMedalItem = (SoulMedalItem) medalItem.getSoulMedalItem();
@@ -147,24 +142,12 @@ public class ServerEvent {
                                 entityData
                         ));
 
-                        pet.spawnAtLocation(soulMedalStack, 1);
+                        pet.spawnAtLocation(level, soulMedalStack, 1);
                     } else {
-                        pet.spawnAtLocation(medalStack, 1);
+                        pet.spawnAtLocation(level, medalStack, 1);
                     }
                 }
             }
-        }
-    }
-
-    /**
-     * Ensure that server entity data is synced with client when player tracking entity,
-     * it allows to keep the medal on dog texture when game restart
-     * @param event Event
-     */
-    @SubscribeEvent
-    public static void onStartTracking(PlayerEvent.StartTracking event) {
-        if (event.getTarget() instanceof TamableAnimal pet && pet.isTame() && event.getEntity() instanceof ServerPlayer player) {
-            PacketDistributor.sendToPlayer(player, createMedalPayload(pet));
         }
     }
 
@@ -232,16 +215,6 @@ public class ServerEvent {
             return server.getProfileCache().get(ownerUUID).map(GameProfile::getName).orElse("?");
         }
         return "?";
-    }
-
-    /**
-     * Create the payload to sync the pet medal with clients
-     * @param pet Pet
-     * @return Payload
-    */
-    private static MedalItemData createMedalPayload(TamableAnimal pet) {
-        CompoundTag tag = pet.getData(ModAttachments.MEDAL_ITEM).serializeNBT(pet.registryAccess());
-        return new MedalItemData(pet.getId(), tag);
     }
 
     /**

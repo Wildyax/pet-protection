@@ -9,7 +9,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.TamableAnimal;
-import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
+import net.minecraft.world.entity.projectile.throwableitemprojectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -58,7 +58,7 @@ public class ResurrectionPearl extends ThrowableItemProjectile {
         super.onHit(result);
 
         Level level = this.level();
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             level.broadcastEntityEvent(this, (byte)3);
             ItemStack itemStack = this.getItem();
             SoulMedalDataComponent soulMedalData = itemStack.get(ModDataComponent.SOUL_MEDAL_DATA);
@@ -73,7 +73,7 @@ public class ResurrectionPearl extends ThrowableItemProjectile {
                         pet.setHealth(pet.getMaxHealth());
                         pet.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
                         pet.setBodyArmorItem(ItemStack.EMPTY);
-                        pet.getData(ModAttachments.MEDAL_ITEM).extractItem(0,1,false);
+                        pet.setData(ModAttachments.MEDAL_ITEM, ItemStack.EMPTY);
 
                         // Clean the state the pet had when it died (poison, wither, fire...)
                         pet.removeAllEffects();
