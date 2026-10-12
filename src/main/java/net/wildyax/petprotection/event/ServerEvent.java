@@ -2,25 +2,29 @@ package net.wildyax.petprotection.event;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.players.NameAndId;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.EntityReference;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.animal.feline.Cat;
 import net.minecraft.world.entity.animal.wolf.Wolf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.storage.TagValueOutput;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.AnvilUpdateEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
-import net.neoforged.neoforge.event.entity.player.AnvilRepairEvent;
+import net.neoforged.neoforge.event.entity.player.AnvilCraftEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.wildyax.petprotection.PetProtection;
 import net.wildyax.petprotection.component.ModDataComponent;
@@ -32,8 +36,6 @@ import net.wildyax.petprotection.utils.ModAttachments;
 
 import java.util.Objects;
 import java.util.UUID;
-
-import com.mojang.authlib.GameProfile;
 
 @EventBusSubscriber(modid = PetProtection.MOD_ID)
 public class ServerEvent {
@@ -52,7 +54,7 @@ public class ServerEvent {
         if (event.getLevel().isClientSide()
             || !(event.getTarget() instanceof TamableAnimal pet)
             || !pet.isTame()
-            || !Objects.equals(pet.getOwnerUUID(), player.getUUID())) {
+            || !pet.isOwnedBy(player)) {
             return;
         }
 
@@ -64,7 +66,7 @@ public class ServerEvent {
                 handItem.consume(1, player);
                 event.getLevel().playSound(null, pet.getX(), pet.getY(), pet.getZ(), SoundEvents.ARMOR_EQUIP_WOLF.value(), SoundSource.NEUTRAL);
             } else {
-                player.displayClientMessage(Component.translatable("message.petprotection.has_medal", pet.getName()), true);
+                player.sendOverlayMessage(Component.translatable("message.petprotection.has_medal", pet.getName()));
             }
             cancelInteraction(event);
         } else if (handItem.is(Items.SHEARS)) {
@@ -73,7 +75,7 @@ public class ServerEvent {
                 return;
             }
             if (medalStack.isEmpty()) {
-                player.displayClientMessage(Component.translatable("message.petprotection.has_no_medal", pet.getName()), true);
+                player.sendOverlayMessage(Component.translatable("message.petprotection.has_no_medal", pet.getName()));
             } else if (event.getLevel() instanceof ServerLevel level) {
                 pet.spawnAtLocation(level, medalStack, 1);
                 pet.setData(ModAttachments.MEDAL_ITEM, ItemStack.EMPTY);
@@ -99,7 +101,7 @@ public class ServerEvent {
             return;
         }
 
-        boolean isOwner = Objects.equals(attacker.getUUID(), pet.getOwnerUUID());
+        boolean isOwner = pet.isOwnedBy(attacker);
         boolean isProtected = isOwner ? medal.protectFromOwner() : medal.protectFromTeamPlayer() && pet.getOwner() instanceof Player owner && !attacker.canHarmPlayer(owner);
         if (isProtected) {
             // Wolves and parrots stand up when hurt, before this event is fired: make them sit again
@@ -120,10 +122,10 @@ public class ServerEvent {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onEntityDeath(LivingDeathEvent event) {
         // Ignore if we are on client side
-        if (event.getEntity().level().isClientSide()) {
+        if (!(event.getEntity().level() instanceof ServerLevel serverLevel)) {
             return;
         }
-        if (event.getEntity() instanceof TamableAnimal pet && pet.isTame() && event.getEntity().level() instanceof ServerLevel level) {
+        if (event.getEntity() instanceof TamableAnimal pet && pet.isTame()) {
             if (!pet.getData(ModAttachments.MEDAL_ITEM).isEmpty()) {
                 ItemStack medalStack = pet.getData(ModAttachments.MEDAL_ITEM);
 
@@ -132,19 +134,26 @@ public class ServerEvent {
 
                     if (soulMedalItem.allowResurrection()) {
                         ItemStack soulMedalStack = new ItemStack(soulMedalItem);
-                        // saveWithoutId save entity data even if the entity is passenger of boat or minecart
-                        CompoundTag entityData = pet.saveWithoutId(new CompoundTag());
+                        CompoundTag entityData;
+
+                        try (ProblemReporter.ScopedCollector reporter = new ProblemReporter.ScopedCollector(PetProtection.LOGGER)) {
+                            TagValueOutput output = TagValueOutput.createWithContext(reporter, pet.registryAccess());
+                            // saveWithoutId save entity data even if the entity is passenger of boat or minecart
+                            pet.saveWithoutId(output);
+                            entityData = output.buildResult();
+                        }
+
                         entityData.putString("id", EntityType.getKey(pet.getType()).toString());
                         soulMedalStack.set(ModDataComponent.SOUL_MEDAL_DATA, new SoulMedalDataComponent(
                                 pet.hasCustomName() ? Objects.requireNonNull(pet.getCustomName()).getString() : "",
                                 EntityType.getKey(pet.getType()).toString(),
-                                getOwnerName(pet),
+                                getOwnerName(pet, serverLevel),
                                 entityData
                         ));
 
-                        pet.spawnAtLocation(level, soulMedalStack, 1);
+                        pet.spawnAtLocation(serverLevel, soulMedalStack, 1);
                     } else {
-                        pet.spawnAtLocation(level, medalStack, 1);
+                        pet.spawnAtLocation(serverLevel, medalStack, 1);
                     }
                 }
             }
@@ -179,7 +188,7 @@ public class ServerEvent {
 
             event.setOutput(resurrectionPearlStack);
             event.setMaterialCost(1);
-            event.setCost(2);
+            event.setXpCost(2);
         }
     }
 
@@ -189,7 +198,7 @@ public class ServerEvent {
      * @param event Event
     */
     @SubscribeEvent
-    public static void onAnvilRepair(AnvilRepairEvent event) {
+    public static void onAnvilCraft(AnvilCraftEvent.Post event) {
         ItemStack itemLeft = event.getLeft();
         if (!event.getEntity().level().isClientSide()
             && event.getOutput().is(ModItems.RESURRECTION_PEARL.get())
@@ -205,15 +214,17 @@ public class ServerEvent {
      * @param pet Pet
      * @return Owner name, or "?" if unknown
     */
-    private static String getOwnerName(TamableAnimal pet) {
+    private static String getOwnerName(TamableAnimal pet, ServerLevel serverLevel) {
         if (pet.getOwner() != null) {
             return pet.getOwner().getName().getString();
         }
-        UUID ownerUUID = pet.getOwnerUUID();
-        MinecraftServer server = pet.getServer();
-        if (ownerUUID != null && server != null && server.getProfileCache() != null) {
-            return server.getProfileCache().get(ownerUUID).map(GameProfile::getName).orElse("?");
+
+        EntityReference<LivingEntity> ownerReference = pet.getOwnerReference();
+        if (ownerReference != null) {
+            UUID ownerUUID = ownerReference.getUUID();
+            return serverLevel.getServer().services().nameToIdCache().get(ownerUUID).map(NameAndId::name).orElse("?");
         }
+
         return "?";
     }
 

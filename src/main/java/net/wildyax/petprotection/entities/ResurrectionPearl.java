@@ -5,7 +5,9 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.TamableAnimal;
@@ -13,7 +15,10 @@ import net.minecraft.world.entity.projectile.throwableitemprojectile.ThrowableIt
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.TagValueInput;
+import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.phys.HitResult;
+import net.wildyax.petprotection.PetProtection;
 import net.wildyax.petprotection.component.ModDataComponent;
 import net.wildyax.petprotection.component.SoulMedalDataComponent;
 import net.wildyax.petprotection.item.ModItems;
@@ -28,12 +33,12 @@ public class ResurrectionPearl extends ThrowableItemProjectile {
         super(entityType, level);
     }
 
-    public ResurrectionPearl(double x, double y, double z, Level level) {
-        super(ModEntities.RESURRECTION_PEARL.get(), x, y, z, level);
+    public ResurrectionPearl(Level level, LivingEntity mob, ItemStack itemStack) {
+        super(ModEntities.RESURRECTION_PEARL.get(), mob, level, itemStack);
     }
 
-    public ResurrectionPearl(LivingEntity shooter, Level level) {
-        super(ModEntities.RESURRECTION_PEARL.get(), shooter, level);
+    public ResurrectionPearl(Level level, double x, double y, double z, ItemStack itemStack) {
+        super(ModEntities.RESURRECTION_PEARL.get(), x, y, z, level, itemStack);
     }
 
     @Override
@@ -64,31 +69,31 @@ public class ResurrectionPearl extends ThrowableItemProjectile {
             SoulMedalDataComponent soulMedalData = itemStack.get(ModDataComponent.SOUL_MEDAL_DATA);
 
             if (soulMedalData != null) {
-                Optional<EntityType<?>> entityType = EntityType.byString(soulMedalData.entityData().getString("id"));
-                entityType.ifPresent(type -> {
-                    Entity entity = type.create(level);
+                Optional<Entity> entity;
+                try (ProblemReporter.ScopedCollector reporter = new ProblemReporter.ScopedCollector(PetProtection.LOGGER)) {
+                    ValueInput input = TagValueInput.create(reporter, level.registryAccess(), soulMedalData.entityData());
+                    entity = EntityType.create(input, level, EntitySpawnReason.LOAD);
+                }
 
-                    if (entity instanceof TamableAnimal pet) {
-                        pet.load(soulMedalData.entityData());
-                        pet.setHealth(pet.getMaxHealth());
-                        pet.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
-                        pet.setBodyArmorItem(ItemStack.EMPTY);
-                        pet.setData(ModAttachments.MEDAL_ITEM, ItemStack.EMPTY);
+                if (entity.orElse(null) instanceof TamableAnimal pet) {
+                    pet.setHealth(pet.getMaxHealth());
+                    pet.snapTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
+                    pet.setBodyArmorItem(ItemStack.EMPTY);
+                    pet.setData(ModAttachments.MEDAL_ITEM, ItemStack.EMPTY);
 
-                        // Clean the state the pet had when it died (poison, wither, fire...)
-                        pet.removeAllEffects();
-                        pet.clearFire();
-                        pet.resetFallDistance();
+                    // Clean the state the pet had when it died (poison, wither, fire...)
+                    pet.removeAllEffects();
+                    pet.clearFire();
+                    pet.resetFallDistance();
 
-                        // If another entity already uses this UUID, the pet would not spawn: give it a new one
-                        if (level instanceof ServerLevel serverLevel && serverLevel.getEntity(pet.getUUID()) != null) {
-                            pet.setUUID(UUID.randomUUID());
-                        }
-
-                        level.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.TOTEM_USE, SoundSource.NEUTRAL);
-                        level.addFreshEntity(pet);
+                    // If another entity already uses this UUID, the pet would not spawn: give it a new one
+                    if (level instanceof ServerLevel serverLevel && serverLevel.getEntity(pet.getUUID()) != null) {
+                        pet.setUUID(UUID.randomUUID());
                     }
-                });
+
+                    level.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.TOTEM_USE, SoundSource.NEUTRAL);
+                    level.addFreshEntity(pet);
+                }
             }
 
             this.discard();

@@ -6,10 +6,11 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.wildyax.petprotection.component.ModDataComponent;
 import net.wildyax.petprotection.component.SoulMedalDataComponent;
 
-import java.util.List;
+import java.util.function.Consumer;
 
 public abstract class SoulMedalItem extends Item {
 
@@ -18,18 +19,18 @@ public abstract class SoulMedalItem extends Item {
     public abstract boolean allowResurrection();
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltipAdder, TooltipFlag flag) {
         SoulMedalDataComponent soulMedalData = stack.get(ModDataComponent.SOUL_MEDAL_DATA);
         if (soulMedalData == null) {
-            tooltipComponents.add(Component.translatable("tooltip.petprotection.no_pet_assigned"));
+            tooltipAdder.accept(Component.translatable("tooltip.petprotection.no_pet_assigned"));
         } else {
             Component petName = soulMedalData.entityTagName().isEmpty()
                 ? EntityType.byString(soulMedalData.entityType()).map(EntityType::getDescription).orElse(Component.literal(soulMedalData.entityType()))
                 : Component.literal(soulMedalData.entityTagName()).withStyle(ChatFormatting.BLUE);
             Component petOwner = Component.literal(soulMedalData.entityOwner()).withStyle(ChatFormatting.YELLOW);
 
-            tooltipComponents.add(Component.translatable("tooltip.petprotection.soul_medal.pet_name", petName).withStyle(ChatFormatting.GRAY));
-            tooltipComponents.add(Component.translatable("tooltip.petprotection.soul_medal.pet_owner", petOwner).withStyle(ChatFormatting.GRAY));
+            tooltipAdder.accept(Component.translatable("tooltip.petprotection.soul_medal.pet_name", petName).withStyle(ChatFormatting.GRAY));
+            tooltipAdder.accept(Component.translatable("tooltip.petprotection.soul_medal.pet_owner", petOwner).withStyle(ChatFormatting.GRAY));
         }
     }
 }
